@@ -2,12 +2,28 @@ define(function () {
 	var colours = [0x00FFFF, 0x00CCFF, 0x0099FF, 0x0066FF, 0x0033FF, 0x0000FF];
 
 	return {
-		draw() {
-			this.clear_drawings();
-			let sprite_array = [];
-			sprite_array = sprite_array.concat(this.draw_hp_in_range());
-			sprite_array = sprite_array.concat(this.draw_party_data());
-			this.apply_PIXI(sprite_array);
+		get_color(value) {
+			//value from 0 to 1
+			let hue = (value * 120).toString(10);
+			return ["hsl(", hue, ",100%,50%)"].join("");
+		},
+		apply_PIXI(sprite_array) {
+			for (let sprite of sprite_array) {
+				parent.drawings.push(sprite);
+				parent.map.addChild(sprite);
+			}
+		},
+		filter_in_range() {
+			var e = [];
+			for (id in parent.entities) {
+				var current = parent.entities[id];
+				if (self.in_range(current)) e.push(current);
+			}
+			return e;
+		},
+		in_range(entity) {
+			if (parent.distance(character, entity) <= character.range) return true;
+			return false;
 		},
 		draw_rectangle(x, y, width, height, size, color, fill, opacity) {
 			if (!color) color = 0x00F33E;
@@ -88,26 +104,19 @@ define(function () {
 			for (let i = 0; i < party_members.length; i++) {
 				let entity = get_player(party_members[i]);
 				if (!entity) continue;
-				sprite_array.push(this.draw_rectangle(entity.real_x - (entity.awidth / 2), entity.real_y - character.aheight, entity.awidth, entity.aheight, null, colours[i]));
+				sprite_array.push(self.draw_rectangle(entity.real_x - (entity.awidth / 2), entity.real_y - character.aheight, entity.awidth, entity.aheight, null, colours[i]));
 				//uncomment below to add a circle to show range of your character [remove the two //]
-				//sprite_array.push(this.draw_circle(entity.real_x, entity.real_y, entity.range + 40, null, colours[i]));
+				//sprite_array.push(self.draw_circle(entity.real_x, entity.real_y, entity.range + 40, null, colours[i]));
 				let target = get_target_of(entity);
 				if (!target) continue;
 				// Drawing Party Member's Target
-				sprite_array.push(this.draw_line(entity.real_x, entity.real_y, target.real_x, target.real_y, null, colours[i]));
+				sprite_array.push(self.draw_line(entity.real_x, entity.real_y, target.real_x, target.real_y, null, colours[i]));
 				if (target.mtype) {
-					sprite_array.push(this.draw_rectangle(target.real_x - (target.width / 2), target.real_y - target.height, target.width, target.height, null, colours[i]));
+					sprite_array.push(self.draw_rectangle(target.real_x - (target.width / 2), target.real_y - target.height, target.width, target.height, null, colours[i]));
 				} else {
-					sprite_array.push(this.draw_rectangle(target.real_x - (target.awidth / 2) - 1, target.real_y - target.aheight - 1, target.awidth + 2, target.aheight + 2, null, colours[i]));
+					sprite_array.push(self.draw_rectangle(target.real_x - (target.awidth / 2) - 1, target.real_y - target.aheight - 1, target.awidth + 2, target.aheight + 2, null, colours[i]));
 				}
 			}
-			return sprite_array;
-		},
-		draw_hp_in_range() {
-			let entities = this.filter_in_range();
-			let sprite_array = [];
-			sprite_array = sprite_array.concat(this.draw_unit_hp(character));
-			entities.forEach(entity => sprite_array = sprite_array.concat(this.draw_unit_hp(entity)));
 			return sprite_array;
 		},
 		draw_unit_hp(entity) {
@@ -121,45 +130,36 @@ define(function () {
 
 			// Get Name
 			if (entity.mtype) {
-				name_sprite = this.draw_text(entity.real_x, entity.real_y + base_offset, entity.mtype, 10);
+				name_sprite = self.draw_text(entity.real_x, entity.real_y + base_offset, entity.mtype, 10);
 			} else {
-				name_sprite = this.draw_text(entity.real_x, entity.real_y + base_offset, entity.name, 10);
+				name_sprite = self.draw_text(entity.real_x, entity.real_y + base_offset, entity.name, 10);
 			}
 
 			// Get HP
-			hp_sprite = this.draw_text(entity.real_x, entity.real_y + base_offset + line_offset, entity.hp + "/" + entity.max_hp, 10, this.get_color(entity.hp / entity.max_hp));
+			hp_sprite = self.draw_text(entity.real_x, entity.real_y + base_offset + line_offset, entity.hp + "/" + entity.max_hp, 10, self.get_color(entity.hp / entity.max_hp));
 
 			let max_width = name_sprite.width > hp_sprite.width ? name_sprite.width : hp_sprite.width;
 			let max_height = name_sprite.height + hp_sprite.height;
 
-			let name_plate = this.draw_rectangle(entity.real_x - (max_width / 2) - x_offset - border, entity.real_y - border, max_width + (border * 2), max_height + (border * 2), null, 0x333333, true, 0.5);
+			let name_plate = self.draw_rectangle(entity.real_x - (max_width / 2) - x_offset - border, entity.real_y - border, max_width + (border * 2), max_height + (border * 2), null, 0x333333, true, 0.5);
 
 			sprite_array.push(name_plate, name_sprite, hp_sprite);
 
 			return sprite_array;
 		},
-		get_color(value) {
-			//value from 0 to 1
-			let hue = (value * 120).toString(10);
-			return ["hsl(", hue, ",100%,50%)"].join("");
+		draw_hp_in_range() {
+			let entities = self.filter_in_range();
+			let sprite_array = [];
+			sprite_array = sprite_array.concat(self.draw_unit_hp(character));
+			entities.forEach(entity => sprite_array = sprite_array.concat(self.draw_unit_hp(entity)));
+			return sprite_array;
 		},
-		apply_PIXI(sprite_array) {
-			for (let sprite of sprite_array) {
-				parent.drawings.push(sprite);
-				parent.map.addChild(sprite);
-			}
-		},
-		filter_in_range() {
-			var e = [];
-			for (id in parent.entities) {
-				var current = parent.entities[id];
-				if (this.in_range(current)) e.push(current);
-			}
-			return e;
-		},
-		in_range(entity) {
-			if (parent.distance(character, entity) <= character.range) return true;
-			return false;
+		draw() {
+			self.clear_drawings();
+			let sprite_array = [];
+			sprite_array = sprite_array.concat(self.draw_hp_in_range());
+			sprite_array = sprite_array.concat(self.draw_party_data());
+			self.apply_PIXI(sprite_array);
 		}
 	};
 });
