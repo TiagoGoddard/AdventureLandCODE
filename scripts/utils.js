@@ -6,7 +6,7 @@ define(function () {
 		},
 		get_bool_var: function(desired) {
 			var saved = JSON.parse(localStorage.getItem('storageVars_'+character.name));
-			if(saved[desired].toLowerCase() == "true" || saved[desired] === true) {
+			if(saved[desired] === true || (typeof saved[desired] == "string" && saved[desired].toLowerCase() == "true") || (typeof saved[desired] == 'number' && saved[desired] > 0)) {
 				return true;
 			} else {
 				return false;

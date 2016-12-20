@@ -160,6 +160,5 @@ define(["require", "scripts/utils", "ui/draw"],function (require, utils, drawer)
 
 	},1000/4);
 
+	setInterval(drawer.draw, 100);
 });
-
-setInterval(drawer.draw, 100);
