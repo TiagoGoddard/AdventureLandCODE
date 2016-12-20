@@ -1,4 +1,13 @@
 define(["require", "scripts/utils", "ui/draw"],function (require, utils, drawer) {
+
+	var anchor_x = utils.get_int_var('anchor_x');
+	var anchor_y = utils.get_int_var('anchor_y');
+	var anchor_distance_x = utils.get_int_var('anchor_distance_x');
+	var anchor_distance_y = utils.get_int_var('anchor_distance_y');
+
+	var near_distance = utils.get_int_var('near_distance');
+	var near_distance_negative = utils.get_int_var('near_distance_negative');
+
 	var turn = 0;
 	var last_turn = 0;
 	var last_x = 0;
@@ -8,7 +17,16 @@ define(["require", "scripts/utils", "ui/draw"],function (require, utils, drawer)
 		turn += 1;
 		if (turn >= 60) {
 			turn = 0;
+
+			anchor_x = utils.get_int_var('anchor_x');
+			anchor_y = utils.get_int_var('anchor_y');
+			anchor_distance_x = utils.get_int_var('anchor_distance_x');
+			anchor_distance_y = utils.get_int_var('anchor_distance_y');
+
+			near_distance = utils.get_int_var('near_distance');
+			near_distance_negative = utils.get_int_var('near_distance_negative');
 		}
+
 		if(utils.is_missing_hp(character, 0.7)) {
 			if(can_heal(character)) {
 				heal(character);

@@ -1,5 +1,9 @@
 define(function () {
 	return {
+		get_int_var: function(desired) {
+			var saved = JSON.parse(localStorage.getItem('storageVars_'+character.name));
+			return parseInt(saved[desired]);
+		},
 		get_random: function (min, max) {
 			return Math.random() * (max - min) + min;
 		},
