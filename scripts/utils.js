@@ -4,6 +4,14 @@ define(function () {
 			var saved = JSON.parse(localStorage.getItem('storageVars_'+character.name));
 			return parseInt(saved[desired]);
 		},
+		get_bool_var: function(desired) {
+			var saved = JSON.parse(localStorage.getItem('storageVars_'+character.name));
+			if(saved[desired].toLowerCase() == "true" || saved[desired] === true) {
+				return true;
+			} else {
+				return false;
+			}
+		},
 		get_random: function (min, max) {
 			return Math.random() * (max - min) + min;
 		},

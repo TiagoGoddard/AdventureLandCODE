@@ -4,10 +4,11 @@ My complete AdventureLandCODE
 
 ## Inside Game CODE Javascript:
 ```javascript
-var anchor_mode=true;
-var attack_mode=true;
+var version = '0.5';
 
 var starter_vars = {
+	'anchor_mode': true,
+	'attack_mode': true,
 	'anchor_x': 1100,
 	'anchor_y': 150,
 	'anchor_distance_x': 300,
@@ -24,9 +25,9 @@ function handle_command(command, args){
 
 	switch(command){
 		case "anchor":
-			anchor_mode = !anchor_mode;
+			retrievedObject.anchor_mode = !anchor_mode;
 
-			if(anchor_mode) {
+			if(retrievedObject.anchor_mode) {
 				game_log('Anchoring', '#0000FF');
 				retrievedObject.anchor_x = character.real_x;
 				retrievedObject.anchor_y = character.real_y;
@@ -62,9 +63,9 @@ function handle_command(command, args){
 	localStorage.setItem('storageVars_'+character.name, JSON.stringify(retrievedObject));
 }
 
-$.getScript('https://cdn.rawgit.com/TiagoGoddard/AdventureLandCODE/v0.3/libs/require.js', function() {
+$.getScript('https://cdn.rawgit.com/TiagoGoddard/AdventureLandCODE/v'+version+'/libs/require.js', function() {
 	requirejs.config({
-		baseUrl: 'https://cdn.rawgit.com/TiagoGoddard/AdventureLandCODE/v0.3/',
+		baseUrl: 'https://cdn.rawgit.com/TiagoGoddard/AdventureLandCODE/v'+version+'/',
 		paths: {
 			utils: 'scripts/utils',
 			draw: 'ui/draw'

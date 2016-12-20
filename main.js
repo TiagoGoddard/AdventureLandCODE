@@ -1,5 +1,8 @@
 define(["require", "scripts/utils", "ui/draw"],function (require, utils, drawer) {
 
+	var anchor_mode=true;
+	var attack_mode=true;
+
 	var anchor_x = utils.get_int_var('anchor_x');
 	var anchor_y = utils.get_int_var('anchor_y');
 	var anchor_distance_x = utils.get_int_var('anchor_distance_x');
@@ -15,6 +18,10 @@ define(["require", "scripts/utils", "ui/draw"],function (require, utils, drawer)
 
 	setInterval(function(){
 		turn += 1;
+
+		var anchor_mode=utils.get_bool_var('anchor_mode');
+		var attack_mode=utils.get_bool_var('attack_mode');
+
 		if (turn >= 60) {
 			turn = 0;
 
