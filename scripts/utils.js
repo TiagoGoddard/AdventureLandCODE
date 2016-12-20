@@ -41,7 +41,7 @@ define(function () {
 			} else {
 				return false;
 			}
-		}
+		},
 
 		is_north: function(character, target) {
 			return target.real_y-character.real_y < 0;

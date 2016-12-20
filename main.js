@@ -1,4 +1,4 @@
-define(["require", "scripts/utils"],function (require, utils) {
+define(["require", "scripts/utils", "ui/draw"],function (require, utils, drawer) {
 	var turn = 0;
 	var last_turn = 0;
 	var last_x = 0;
@@ -137,4 +137,4 @@ define(["require", "scripts/utils"],function (require, utils) {
 
 });
 
-setInterval(draw, 100);
+setInterval(drawer.draw, 100);
