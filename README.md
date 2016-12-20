@@ -4,7 +4,7 @@ My complete AdventureLandCODE
 
 ## Inside Game CODE Javascript:
 ```javascript
-var version = '0.6';
+var version = '0.8';
 
 var starter_vars = {
 	'anchor_mode': true,

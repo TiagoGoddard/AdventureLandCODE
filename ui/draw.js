@@ -2,18 +2,18 @@ define(function () {
 	var colours = [0x00FFFF, 0x00CCFF, 0x0099FF, 0x0066FF, 0x0033FF, 0x0000FF];
 
 	return {
-		get_color(value) {
+		get_color: function(value) {
 			//value from 0 to 1
 			let hue = (value * 120).toString(10);
 			return ["hsl(", hue, ",100%,50%)"].join("");
 		},
-		apply_PIXI(sprite_array) {
+		apply_PIXI: function(sprite_array) {
 			for (let sprite of sprite_array) {
 				parent.drawings.push(sprite);
 				parent.map.addChild(sprite);
 			}
 		},
-		filter_in_range() {
+		filter_in_range: function() {
 			var e = [];
 			for (id in parent.entities) {
 				var current = parent.entities[id];
@@ -21,11 +21,11 @@ define(function () {
 			}
 			return e;
 		},
-		in_range(entity) {
+		in_range: function(entity) {
 			if (parent.distance(character, entity) <= character.range) return true;
 			return false;
 		},
-		draw_rectangle(x, y, width, height, size, color, fill, opacity) {
+		draw_rectangle: function(x, y, width, height, size, color, fill, opacity) {
 			if (!color) color = 0x00F33E;
 			if (!size) size = 1;
 			let rectangle = new PIXI.Graphics();
@@ -43,7 +43,7 @@ define(function () {
 			}
 			return rectangle;
 		},
-		draw_circle(x, y, radius, size, color) {
+		draw_circle: function(x, y, radius, size, color) {
 			if (!color) {
 				color = 0x00F33E;
 			}
@@ -56,7 +56,7 @@ define(function () {
 			sprite.drawCircle(x, y, radius);
 			return sprite;
 		},
-		draw_line(x, y, x2, y2, size, color) {
+		draw_line: function(x, y, x2, y2, size, color) {
 			if (!color) {
 				color = 0xF38D00;
 			}
@@ -71,7 +71,7 @@ define(function () {
 			sprite.endFill();
 			return sprite;
 		},
-		draw_text(x, y, text, size = 20, color = 0x000000, font = 'pixel', quality = 2) {
+		draw_text: function(x, y, text, size = 20, color = 0x000000, font = 'pixel', quality = 2) {
 			let sprite = new PIXI.Text(text, {
 				fontFamily: font,
 				fontSize: size * quality,
@@ -87,7 +87,7 @@ define(function () {
 			sprite.displayGroup = parent.text_layer;
 			return sprite;
 		},
-		clear_drawings() {
+		clear_drawings: function() {
 			drawings.forEach(sprite => {
 				try {
 					sprite.destroy();
@@ -95,7 +95,7 @@ define(function () {
 			});
 			drawings = parent.drawings = [];
 		},
-		draw_party_data() {
+		draw_party_data: function() {
 			let party_members = parent.party_list;
 			if (party_members.length < 1) {
 				return [];
@@ -119,7 +119,7 @@ define(function () {
 			}
 			return sprite_array;
 		},
-		draw_unit_hp(entity) {
+		draw_unit_hp: function(entity) {
 			const base_offset = 4;
 			const line_offset = 7;
 			const x_offset = 0.75;
@@ -147,14 +147,14 @@ define(function () {
 
 			return sprite_array;
 		},
-		draw_hp_in_range() {
+		draw_hp_in_range: function() {
 			let entities = self.filter_in_range();
 			let sprite_array = [];
 			sprite_array = sprite_array.concat(self.draw_unit_hp(character));
 			entities.forEach(entity => sprite_array = sprite_array.concat(self.draw_unit_hp(entity)));
 			return sprite_array;
 		},
-		draw() {
+		draw: function() {
 			self.clear_drawings();
 			let sprite_array = [];
 			sprite_array = sprite_array.concat(self.draw_hp_in_range());
