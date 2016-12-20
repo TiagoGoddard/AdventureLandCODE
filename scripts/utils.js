@@ -59,13 +59,13 @@ define(function () {
 			return target.real_y-character.real_y < 0;
 		},
 		is_south: function(character, target) {
-			return !isNorth(character, target);
+			return target.real_y-character.real_y > 0;
 		},
 		is_west: function(character, target) {
 			return target.real_x-character.real_x < 0;
 		},
 		is_east: function(character, target) {
-			return !isWest(character, target);
+			return target.real_x-character.real_x > 0;
 		},
 		is_away_from: function(x, y, distance_x, distance_y) {
 			return character.real_x < x - distance_x || character.real_x > x + distance_x || character.real_y < y - distance_y || character.real_y > y + distance_y;
