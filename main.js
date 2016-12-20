@@ -1,6 +1,4 @@
-define(function (require) {
-    var utils = require('utils');
-
+define(["require", "scripts/utils"],function (require, utils) {
 	var turn = 0;
 	var last_turn = 0;
 	var last_x = 0;

@@ -16,12 +16,12 @@ var near_distance=60;
 var near_distance_negative=-60;
 
 function handle_command(command, args){
-    switch(command){
-        case "anchor":
-            anchor_mode = !anchor_mode;
+	switch(command){
+		case "anchor":
+			anchor_mode = !anchor_mode;
 
-            if(anchor_mode) {
-            	game_log('Anchoring', '#0000FF');
+			if(anchor_mode) {
+				game_log('Anchoring', '#0000FF');
 				anchor_x = character.real_x;
 				anchor_y = character.real_y;
 
@@ -37,37 +37,29 @@ function handle_command(command, args){
 			} else {
 				game_log('Un-Anchoring', '#0000FF');
 			}
-            break;
-        case "near":
+			break;
+		case "near":
 			if(args.length > 0 && args.length <= 1) {
 				near_distance = parseInt(args[0]);
 				near_distance_negative = 0 - near_distance;
 			}
-            break;
-        case "attack":
-            attack_mode = !attack_mode;
-            break;
+			break;
+		case "attack":
+			attack_mode = !attack_mode;
+			break;
 		case "where":
 			game_log('X:'+character.real_x, '#00ff00');
 			game_log('Y:'+character.real_y, '#00ff00');
 			break;
-    }
+	}
 }
 
-$.getScript('https://raw.githubusercontent.com/TiagoGoddard/AdventureLandCODE/master/libs/require.js', function() {
+$.getScript('https://raw.githack.com/TiagoGoddard/AdventureLandCODE/master/libs/require.js', function() {
 	requirejs.config({
-	    baseUrl: 'https://raw.githubusercontent.com/TiagoGoddard/AdventureLandCODE/master/',
-	    paths: {
-	        // the left side is the module ID,
-	        // the right side is the path to
-	        // the jQuery file, relative to baseUrl.
-	        // Also, the path should NOT include
-	        // the '.js' file extension. This example
-	        // is using jQuery 1.9.0 located at
-	        // js/lib/jquery-1.9.0.js, relative to
-	        // the HTML page.
-	        utils: 'scripts/utils'
-	    }
+		baseUrl: 'https://raw.githack.com/TiagoGoddard/AdventureLandCODE/master/',
+		paths: {
+			utils: 'scripts/utils'
+		}
 	});
 
 	requirejs(['main']);
