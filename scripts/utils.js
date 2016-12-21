@@ -1,5 +1,8 @@
 define(function () {
 	return {
+		get_var: function(desired) {
+			return JSON.parse(localStorage.getItem('storageVars_'+character.name))[desired];
+		}
 		get_int_var: function(desired) {
 			var saved = JSON.parse(localStorage.getItem('storageVars_'+character.name));
 			return parseInt(saved[desired]);
@@ -28,14 +31,39 @@ define(function () {
 		get_party_players: function(partyName) {
 			var entities=parent.entities;
 			var party = [];
-			for(i in entities) {
-				if(entities[i].type=="character" && entities[i].party==partyName && entities[i].name != character.name) {
-					party.push(entities[i]);
+			if(character.party) {
+				for(i in entities) {
+					if(entities[i].type=="character" && entities[i].party==partyName && entities[i].name != character.name) {
+						party.push(entities[i]);
+					}
 				}
 			}
 			return party;
 		},
+		get_monsters_targeted_party: function() {
+			var entities=parent.entities;
+			var party = [];
+			var targeted = [];
 
+			if(character.party) {
+				for(i in entities) {
+					if(entities[i].type=="character" && entities[i].party==partyName && entities[i].name != character.name) {
+						party.push(entities[i]);
+					}
+				}
+				for(j in party) {
+					var entity = party[j];
+					for(id in parent.entities) {
+						var current=parent.entities[id];
+						if(current.type!="monster" || current.dead) continue;
+						if(current.target!=entity.name) continue;
+						targeted.push(current);
+					}
+				}
+			}
+
+			return targeted;
+		},
 		has_range: function(target, range) {
 			if(!target) return false;
 			if(parent.distance(character,target)<=range) return true;
@@ -75,6 +103,21 @@ define(function () {
 		},
 		is_missing_mp: function(entity, percentage) {
 			return (entity.mp  / entity.max_mp) < percentage;
+		},
+
+		use_hp: function() {
+			if(safeties && mssince(last_potion)<600) return;
+			var used=false;
+			if(new Date()<parent.next_potion) return;
+			if(character.hp<character.max_hp) parent.use('hp'),used=true;
+			if(used) last_potion=new Date();
+		},
+		use_mp: function() {
+			if(safeties && mssince(last_potion)<600) return;
+			var used=false;
+			if(new Date()<parent.next_potion) return;
+			if(character.mp<character.max_mp) parent.use('hp'),used=true;
+			if(used) last_potion=new Date();
 		}
 
 	};
