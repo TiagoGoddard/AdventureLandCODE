@@ -4,7 +4,7 @@ My complete AdventureLandCODE
 
 ## Inside Game CODE Javascript:
 ```javascript
-var version = '0.16';
+var version = '0.17';
 
 // Handle party
 var party_leader = 'Washer';
