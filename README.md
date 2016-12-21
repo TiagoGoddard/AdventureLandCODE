@@ -4,7 +4,7 @@ My complete AdventureLandCODE
 
 ## Inside Game CODE Javascript:
 ```javascript
-var version = '0.13';
+var version = '0.14';
 
 // Handle party
 var party_leader = 'Washer';
@@ -97,6 +97,7 @@ function handle_command(command, args){
 
 var starter_vars = {
 	'global_runner': false,
+	'quited_runner': false,
 
 	'allow_potions_purchase': true,
 	'buy_hp': true,

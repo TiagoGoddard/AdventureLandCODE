@@ -245,6 +245,8 @@ define(["require", "scripts/utils", "ui/draw", 'scripts/classes/priest', 'script
 
 					clearInterval(drawInterval);
 					clearInterval(mainInterval);
+
+					utils.set_var('quited_runner', true);
 				}
 			}
 		},1000);

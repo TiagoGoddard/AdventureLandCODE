@@ -71,7 +71,13 @@ define(function () {
 			}
 
 			return [-1, null];
-		}
+		},
+
+		set_var: function(desired, value) {
+			var retrievedObject = JSON.parse(localStorage.getItem('storageVars_'+character.name));
+			retrievedObject[desired] = value;
+			localStorage.setItem('storageVars_'+character.name, JSON.stringify(retrievedObject));
+		},
 
 		has_range: function(target, range) {
 			if(!target) return false;
