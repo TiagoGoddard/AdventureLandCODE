@@ -212,15 +212,18 @@ define(["require", "scripts/utils", "ui/draw", 'scripts/classes/priest', 'script
 
 		var quit = false;
 		var global_runner = false;
-		do {
-			global_runner = utils.get_bool_var('global_runner');
-			if(global_runner === true) {
-				quit = true;
 
-				clearInterval(drawInterval);
-				clearInterval(mainInterval);
+		setInterval(function() {
+			if(!quit) {
+				global_runner = utils.get_bool_var('global_runner');
+				if(global_runner === true) {
+					quit = true;
+
+					clearInterval(drawInterval);
+					clearInterval(mainInterval);
+				}
 			}
-		} while (!quit);
+		},1000);
 
 	}
 });
