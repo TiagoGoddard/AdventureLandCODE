@@ -31,7 +31,7 @@ define(["require", "scripts/utils", "ui/draw", 'scripts/classes/priest', 'script
 		var min_xp = utils.get_int_var('min_xp');
 		var max_att = utils.get_int_var('max_att');
 
-		var purchase_pots = utils.get_bool_var('purchase_pots');
+		var allow_potions_purchase = utils.get_bool_var('allow_potions_purchase');
 		var buy_hp = utils.get_bool_var('buy_hp');
 		var buy_mp = utils.get_bool_var('buy_mp');
 		var hp_potion = utils.get_var('hp_potion');
@@ -65,7 +65,7 @@ define(["require", "scripts/utils", "ui/draw", 'scripts/classes/priest', 'script
 				max_att = utils.get_int_var('max_att');
 
 				//Check for potions
-				if(purchase_pots) {
+				if(allow_potions_purchase) {
 					let [hpslot, hppot] = utils.get_item(i => i.name == hp_potion);
 					let [mpslot, mppot] = utils.get_item(i => i.name == mp_potion);
 

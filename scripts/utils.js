@@ -64,7 +64,7 @@ define(function () {
 
 			return targeted;
 		},
-		get_item: function(filder) {
+		get_item: function(filter) {
 			for (let i = 0; i < character.items.length; i++) {
 				let item = character.items[i];
 				if (item && filter(item)) return [i, character.items[i]];
@@ -131,7 +131,7 @@ define(function () {
 			if(safeties && mssince(last_potion)<600) return;
 			var used=false;
 			if(new Date()<parent.next_potion) return;
-			if(character.mp<character.max_mp) parent.use('hp'),used=true;
+			if(character.mp<character.max_mp) parent.use('mp'),used=true;
 			if(used) last_potion=new Date();
 		}
 	};
