@@ -12,6 +12,9 @@ define(["require", "scripts/utils", "ui/draw", 'scripts/classes/priest', 'script
 		case 'ranger':
 			pclass = ranger;
 			break;
+		case 'mage':
+			pclass = mage;
+			break;
 	}
 
 	if(pclass) {
@@ -100,11 +103,20 @@ define(["require", "scripts/utils", "ui/draw", 'scripts/classes/priest', 'script
 			var party = utils.get_party_players();
 			for(id in party) {
 				var partyPlayer = party[id];
-				if(character.name!=party_leader && !in_attack_range(partyPlayer)) {
-					move(
-						character.real_x+(partyPlayer.real_x-character.real_x)/2,
-						character.real_y+(partyPlayer.real_y-character.real_y)/2
-					);
+				if(pclass.is_ranged()) { // Make ranged characters stay near the leader and other party members
+					if(character.name!=party_leader && !in_attack_range(partyPlayer)) {
+						move(
+							character.real_x+(partyPlayer.real_x-character.real_x)/2,
+							character.real_y+(partyPlayer.real_y-character.real_y)/2
+						);
+					}
+				} else { // Make melee stay near the leader and other party members
+					if(character.name != party_leader && has_range(partyPlayer, near_distance * 3)) {
+						move(
+							character.real_x+(partyPlayer.real_x-character.real_x)/4,
+							character.real_y+(partyPlayer.real_y-character.real_y)/4
+						);
+					}
 				}
 				if(pclass.is_healer()) {
 					if(!partyPlayer.rip && utils.is_missing_hp(partyPlayer, 0.5)) {
