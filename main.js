@@ -1,16 +1,16 @@
-define(["require", "scripts/utils", "ui/draw"],function (require, utils, drawer) {
+define(["require", "scripts/utils", "ui/draw", 'scripts/classes/priest', 'scripts/classes/warrior', 'scripts/classes/ranger'],function (require, utils, drawer, priest, warrior, ranger) {
 
 	var pclass = null;
 
 	switch(character.ctype) {
 		case 'priest':
-			pclass = require('scripts/classes/priest');
+			pclass = priest;
 			break;
 		case 'warrior':
-			pclass = require('scripts/classes/warrior');
+			pclass = warrior;
 			break;
 		case 'ranger':
-			pclass = require('scripts/classes/ranger');
+			pclass = ranger;
 			break;
 	}
 

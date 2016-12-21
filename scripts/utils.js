@@ -2,7 +2,7 @@ define(function () {
 	return {
 		get_var: function(desired) {
 			return JSON.parse(localStorage.getItem('storageVars_'+character.name))[desired];
-		}
+		},
 		get_int_var: function(desired) {
 			var saved = JSON.parse(localStorage.getItem('storageVars_'+character.name));
 			return parseInt(saved[desired]);

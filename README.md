@@ -4,7 +4,7 @@ My complete AdventureLandCODE
 
 ## Inside Game CODE Javascript:
 ```javascript
-var version = '0.10';
+var version = '0.11';
 
 // Handle party
 var party_leader = 'Washer';
@@ -52,23 +52,26 @@ function handle_command(command, args){
 	switch(command){
 		case "anchor":
 			retrievedObject.anchor_mode = !retrievedObject.anchor_mode;
+			if(character.name == party_leader) {
+				if(retrievedObject.anchor_mode) {
+					game_log('Anchoring', '#0000FF');
+					retrievedObject.anchor_x = character.real_x;
+					retrievedObject.anchor_y = character.real_y;
 
-			if(retrievedObject.anchor_mode) {
-				game_log('Anchoring', '#0000FF');
-				retrievedObject.anchor_x = character.real_x;
-				retrievedObject.anchor_y = character.real_y;
-
-				if(args.length > 0 && args.length <= 2) {
-					if(args.length == 1) {
-						retrievedObject.anchor_distance_x = parseInt(args[0]);
-						retrievedObject.anchor_distance_y = parseInt(args[0]);
-					} else {
-						retrievedObject.anchor_distance_x = parseInt(args[0]);
-						retrievedObject.anchor_distance_y = parseInt(args[1]);
+					if(args.length > 0 && args.length <= 2) {
+						if(args.length == 1) {
+							retrievedObject.anchor_distance_x = parseInt(args[0]);
+							retrievedObject.anchor_distance_y = parseInt(args[0]);
+						} else {
+							retrievedObject.anchor_distance_x = parseInt(args[0]);
+							retrievedObject.anchor_distance_y = parseInt(args[1]);
+						}
 					}
+				} else {
+					game_log('Un-Anchoring', '#0000FF');
 				}
 			} else {
-				game_log('Un-Anchoring', '#0000FF');
+				game_log('Only Party Leader: '+party_leader, '#0000FF');
 			}
 			break;
 		case "near":
