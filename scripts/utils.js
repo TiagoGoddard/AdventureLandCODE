@@ -28,12 +28,12 @@ define(function () {
 			}
 			return targeted;
 		},
-		get_party_players: function(partyName) {
+		get_party_players: function() {
 			var entities=parent.entities;
 			var party = [];
 			if(character.party) {
 				for(i in entities) {
-					if(entities[i].type=="character" && entities[i].party==partyName && entities[i].name != character.name) {
+					if(entities[i].type=="character" && entities[i].party==character.party && entities[i].name != character.name) {
 						party.push(entities[i]);
 					}
 				}
@@ -47,7 +47,7 @@ define(function () {
 
 			if(character.party) {
 				for(i in entities) {
-					if(entities[i].type=="character" && entities[i].party==partyName && entities[i].name != character.name) {
+					if(entities[i].type=="character" && entities[i].party==character.party && entities[i].name != character.name) {
 						party.push(entities[i]);
 					}
 				}

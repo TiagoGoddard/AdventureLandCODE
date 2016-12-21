@@ -74,7 +74,7 @@ define(["require", "scripts/utils", "ui/draw", 'scripts/classes/priest', 'script
 			//TODO Gold Boosters
 			loot();
 
-			var party = utils.get_party_players(character.name);
+			var party = utils.get_party_players();
 			for(id in party) {
 				var partyPlayer = party[id];
 				if(character.name!=party_leader && !in_attack_range(partyPlayer)) {
@@ -101,6 +101,7 @@ define(["require", "scripts/utils", "ui/draw", 'scripts/classes/priest', 'script
 			var target=get_targeted_monster();
 			var targeted=utils.get_monsters_targeted(character);
 
+			//TODO xp
 			if(!target) {
 				var targetParty = false;
 				for(id in party) {
