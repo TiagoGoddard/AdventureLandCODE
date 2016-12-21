@@ -97,15 +97,27 @@ function handle_command(command, args){
 
 var starter_vars = {
 	'global_runner': false,
+
+	'allow_potions_purchase': true,
+	'buy_hp': true,
+	'buy_mp': true,
+	'hp_potion': 'hpot0',
+	'mp_potion': 'mpot0',
+	'pots_minimum': 50,
+	'pots_to_buy': 1000,
+
 	'anchor_mode': false,
-	'attack_mode': true,
 	'anchor_x': 1100,
 	'anchor_y': 150,
 	'anchor_distance_x': 300,
 	'anchor_distance_y': 150,
+
 	'near_distance': 60,
 	'near_distance_negative': -60,
+
 	'party_leader': party_leader,
+
+	'attack_mode': true,
 	'min_xp': 800,
 	'max_att': 79
 };

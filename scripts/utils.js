@@ -64,6 +64,15 @@ define(function () {
 
 			return targeted;
 		},
+		get_item: function(filder) {
+			for (let i = 0; i < character.items.length; i++) {
+				let item = character.items[i];
+				if (item && filter(item)) return [i, character.items[i]];
+			}
+
+			return [-1, null];
+		}
+
 		has_range: function(target, range) {
 			if(!target) return false;
 			if(parent.distance(character,target)<=range) return true;
@@ -105,20 +114,19 @@ define(function () {
 			return (entity.mp  / entity.max_mp) < percentage;
 		},
 
-		use_hp: function() {
+		do_use_hp: function() {
 			if(safeties && mssince(last_potion)<600) return;
 			var used=false;
 			if(new Date()<parent.next_potion) return;
 			if(character.hp<character.max_hp) parent.use('hp'),used=true;
 			if(used) last_potion=new Date();
 		},
-		use_mp: function() {
+		do_use_mp: function() {
 			if(safeties && mssince(last_potion)<600) return;
 			var used=false;
 			if(new Date()<parent.next_potion) return;
 			if(character.mp<character.max_mp) parent.use('hp'),used=true;
 			if(used) last_potion=new Date();
 		}
-
 	};
 });

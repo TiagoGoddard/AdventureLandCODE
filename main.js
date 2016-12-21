@@ -31,6 +31,14 @@ define(["require", "scripts/utils", "ui/draw", 'scripts/classes/priest', 'script
 		var min_xp = utils.get_int_var('min_xp');
 		var max_att = utils.get_int_var('max_att');
 
+		var purchase_pots = utils.get_bool_var('purchase_pots');
+		var buy_hp = utils.get_bool_var('buy_hp');
+		var buy_mp = utils.get_bool_var('buy_mp');
+		var hp_potion = utils.get_var('hp_potion');
+		var mp_potion = utils.get_var('mp_potion');
+		var pots_minimum = utils.get_int_var('pots_minimum');
+		var pots_to_buy = utils.get_int_var('pots_to_buy');
+
 		var turn = 0;
 		var last_turn = 0;
 		var last_x = 0;
@@ -55,6 +63,21 @@ define(["require", "scripts/utils", "ui/draw", 'scripts/classes/priest', 'script
 
 				min_xp = utils.get_int_var('min_xp');
 				max_att = utils.get_int_var('max_att');
+
+				//Check for potions
+				if(purchase_pots) {
+					let [hpslot, hppot] = utils.get_item(i => i.name == hp_potion);
+					let [mpslot, mppot] = utils.get_item(i => i.name == mp_potion);
+
+					if (buy_hp && (!hppot || hppot.q < pots_minimum)) {
+						parent.buy(hp_potion, pots_to_buy);
+						set_message("Buying HP pots.");
+					}
+					if (buy_mp && (!mppot || mppot.q < pots_minimum)) {
+						parent.buy(mp_potion, pots_to_buy);
+						set_message("Buying MP pots.");
+					}
+				}
 			}
 
 			if(pclass.is_healer()) {
@@ -66,9 +89,9 @@ define(["require", "scripts/utils", "ui/draw", 'scripts/classes/priest', 'script
 			}
 
 			if(utils.is_missing_hp(character, 0.5)) {
-				utils.use_hp();
+				utils.do_use_hp();
 			} else if (utils.is_missing_mp(character, 0.5)) {
-				utils.use_mp();
+				utils.do_use_mp();
 			}
 
 			//TODO Gold Boosters
