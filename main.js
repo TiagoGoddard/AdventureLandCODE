@@ -1,4 +1,4 @@
-define(["require", "scripts/utils", "ui/draw", 'scripts/classes/priest', 'scripts/classes/warrior', 'scripts/classes/ranger'],function (require, utils, drawer, priest, warrior, ranger) {
+define(["require", "scripts/utils", "ui/draw", 'scripts/classes/priest', 'scripts/classes/warrior', 'scripts/classes/ranger', 'scripts/classes/mage'],function (require, utils, drawer, priest, warrior, ranger, mage) {
 
 	var pclass = null;
 
@@ -111,7 +111,7 @@ define(["require", "scripts/utils", "ui/draw", 'scripts/classes/priest', 'script
 						);
 					}
 				} else { // Make melee stay near the leader and other party members
-					if(character.name != party_leader && has_range(partyPlayer, near_distance * 3)) {
+					if(character.name != party_leader && utils.has_range(partyPlayer, near_distance * 3)) {
 						move(
 							character.real_x+(partyPlayer.real_x-character.real_x)/4,
 							character.real_y+(partyPlayer.real_y-character.real_y)/4
