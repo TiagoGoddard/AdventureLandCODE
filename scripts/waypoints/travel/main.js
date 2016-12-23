@@ -383,6 +383,15 @@ define(["scripts/utils"],function (utils) {
 		return waypm;
 	};
 
+	map.get_waypoint_by_id = function(id) {
+		for(var wayp in map.waypoints) {
+			if(wayp.id == id) {
+				return wayp;
+			}
+		}
+		return null;
+	};
+
 	map.get_waypoint = function(x,y) {
 		for(var wayp in map.waypoints) {
 			if(utils.is_inside(wayp, x, y)) {
@@ -455,4 +464,5 @@ define(["scripts/utils"],function (utils) {
 		}
 	};
 
+	return map;
 });

@@ -49,6 +49,9 @@ define(["require", "scripts/utils", "ui/draw", 'scripts/classes/priest', 'script
 		var pots_minimum = utils.get_int_var('pots_minimum');
 		var pots_to_buy = utils.get_int_var('pots_to_buy');
 
+		var pathfind_mode = utils.get_bool_var('pathfind_mode');
+		var pathfind_destination = utils.get_var('pathfind_destination');
+
 		var turn = 0;
 		var last_turn = 0;
 		var last_attack = 0;
@@ -59,19 +62,11 @@ define(["require", "scripts/utils", "ui/draw", 'scripts/classes/priest', 'script
 		var last_y = 0;
 
 		var mainInterval = setInterval(function(){
-
-			switch(parent.current_map) {
-				case 'main':
-					cur_map = travel_main;
-					break;
-				default:
-					cur_map = null;
-			}
-
 			turn += 1;
 
 			anchor_mode=utils.get_bool_var('anchor_mode');
 			attack_mode=utils.get_bool_var('attack_mode');
+			pathfind_mode = utils.get_bool_var('pathfind_mode');
 
 			if (turn >= 60) {
 				turn = 0;
@@ -94,7 +89,7 @@ define(["require", "scripts/utils", "ui/draw", 'scripts/classes/priest', 'script
 
 					if (buy_hp && (!hppot || hppot.q < pots_minimum)) {
 						parent.buy(hp_potion, pots_to_buy);
-            set_message("Buying HP pots, slot: "+hpslot);
+						set_message("Buying HP pots, slot: "+hpslot);
 					}
 					if (buy_mp && (!mppot || mppot.q < pots_minimum)) {
 						parent.buy(mp_potion, pots_to_buy);
@@ -127,7 +122,7 @@ define(["require", "scripts/utils", "ui/draw", 'scripts/classes/priest', 'script
 			}
 
 			var party = utils.get_party_players();
-      var partyPlayer = null;
+			var partyPlayer = null;
 
 			for(var id in party) {
 				partyPlayer = party[id];
@@ -155,7 +150,26 @@ define(["require", "scripts/utils", "ui/draw", 'scripts/classes/priest', 'script
 				}
 			}
 
-			if(!attack_mode || character.moving) return;
+			if(pathfind_mode) {
+				switch(parent.current_map) {
+					case 'main':
+						cur_map = travel_main;
+						break;
+					default:
+						cur_map = null;
+				}
+				if(cur_map) {
+					pathfind_destination = utils.get_var('pathfind_destination');
+
+					var waypointStart = cur_map.get_waypoint_by_id('town');
+					var waypointDest = cur_map.get_waypoint_by_id(pathfind_destination);
+					var path = cur_map.get_waypoint_path(waypointStart, waypointDest);
+
+					utils.set_var('pathfind_mode', false);
+				}
+			}
+
+			if(!attack_mode || character.moving || pathfind_mode) return;
 
 			if(anchor_mode && character.name == party_leader && utils.is_away_from(anchor_x, anchor_y, anchor_distance_x, anchor_distance_y)) {
 				move(anchor_x, anchor_y);
