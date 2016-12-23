@@ -115,6 +115,25 @@ define(["require", "scripts/utils", "ui/draw", 'scripts/classes/priest', 'script
 			//TODO Gold Boosters
 			loot();
 
+			if(pathfind_mode) {
+				switch(parent.current_map) {
+					case 'main':
+						cur_map = travel_main;
+						break;
+					default:
+						cur_map = null;
+				}
+				if(cur_map) {
+					pathfind_destination = utils.get_var('pathfind_destination');
+
+					var waypointStart = cur_map.get_waypoint_by_id('town');
+					var waypointDest = cur_map.get_waypoint_by_id(pathfind_destination);
+					var path = cur_map.get_waypoint_path(waypointStart, waypointDest);
+
+					utils.set_var('pathfind_mode', false);
+				}
+			}
+
 			if(!pclass.has_attack()) {
 				//Only merchant class dosn't have attack
 
@@ -147,25 +166,6 @@ define(["require", "scripts/utils", "ui/draw", 'scripts/classes/priest', 'script
 							heal(partyPlayer);
 						}
 					}
-				}
-			}
-
-			if(pathfind_mode) {
-				switch(parent.current_map) {
-					case 'main':
-						cur_map = travel_main;
-						break;
-					default:
-						cur_map = null;
-				}
-				if(cur_map) {
-					pathfind_destination = utils.get_var('pathfind_destination');
-
-					var waypointStart = cur_map.get_waypoint_by_id('town');
-					var waypointDest = cur_map.get_waypoint_by_id(pathfind_destination);
-					var path = cur_map.get_waypoint_path(waypointStart, waypointDest);
-
-					utils.set_var('pathfind_mode', false);
 				}
 			}
 
