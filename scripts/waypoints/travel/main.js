@@ -4,7 +4,7 @@ define(["scripts/utils"],function (utils) {
 	map.name = "main";
 	map.npcs = parent.G.maps[map.name].npcs;
 	map.doors = parent.G.maps[map.name].doors;
-	map.parts = [];
+	map.waypoints = [];
 
 	var town = {
 		id: "town",
@@ -360,7 +360,7 @@ define(["scripts/utils"],function (utils) {
 	arena.transfers.push(transfer_batcave_arena);
 	batcave.transfers.push(transfer_batcave_arena);
 
-	// Map parts
+	// Map waypoints
 	map.waypoints.push(town);
 	map.waypoints.push(bank);
 	map.waypoints.push(goobee);
@@ -404,14 +404,14 @@ define(["scripts/utils"],function (utils) {
 	map.get_waypoint_recursive = function(path, count, wayp_cur, wayp_str, wayp_des) {
 		path.push(wayp_cur);
 		count += 1;
-    if(count > 99) {
+		if(count > 99) {
 			path.push(wayp_str);
-      return path;
-    } else if(wayp_cur.id == wayp_str.id && count > 0) {
 			return path;
-    }	else if(wayp_cur.id == wayp_des.id) {
+		} else if(wayp_cur.id == wayp_str.id && count > 0) {
 			return path;
-    }	else {
+		}	else if(wayp_cur.id == wayp_des.id) {
+			return path;
+		}	else {
 			var connectedPaths = wayp_cur.transfers.between;
 			var possibleWayps = [];
 
