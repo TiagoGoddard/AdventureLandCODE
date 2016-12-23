@@ -4,7 +4,7 @@ My complete AdventureLandCODE
 
 ## Inside Game CODE Javascript:
 ```javascript
-var version = '0.23';
+var version = '0.25';
 
 // Handle party
 var party_leader = 'Washer';
@@ -183,7 +183,7 @@ $.getScript('https://cdn.rawgit.com/TiagoGoddard/AdventureLandCODE/v'+version+'/
 ```
 
 ## PositionFinder Game CODE Javascript:
-```
+```javascript
 //TODO AutoBuy and Sell itens for set price
 var party_leader = 'Washer';
 
