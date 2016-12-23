@@ -1,6 +1,7 @@
-define(["require", "scripts/utils", "ui/draw", 'scripts/classes/priest', 'scripts/classes/warrior', 'scripts/classes/ranger', 'scripts/classes/mage'],function (require, utils, drawer, priest, warrior, ranger, mage) {
+define(["require", "scripts/utils", "ui/draw", 'scripts/classes/priest', 'scripts/classes/warrior', 'scripts/classes/ranger', 'scripts/classes/rougue', 'scripts/classes/mage', 'scripts/classes/merchant', 'scripts/waypoints/travel/main'],function (require, utils, drawer, priest, warrior, ranger, rougue, mage, merchant, travel_main) {
 
 	var pclass = null;
+	var cur_map = null;
 
 	switch(character.ctype) {
 		case 'priest':
@@ -14,6 +15,12 @@ define(["require", "scripts/utils", "ui/draw", 'scripts/classes/priest', 'script
 			break;
 		case 'mage':
 			pclass = mage;
+			break;
+		case 'rougue':
+			pclass = rougue;
+			break;
+		case 'merchant':
+			pclass = merchant;
 			break;
 	}
 
@@ -44,10 +51,23 @@ define(["require", "scripts/utils", "ui/draw", 'scripts/classes/priest', 'script
 
 		var turn = 0;
 		var last_turn = 0;
+		var last_attack = 0;
+		var last_skill = null;
+		var last_target = null;
+
 		var last_x = 0;
 		var last_y = 0;
 
 		var mainInterval = setInterval(function(){
+
+			switch(parent.current_map) {
+				case 'main':
+					cur_map = travel_main;
+					break;
+				default:
+					cur_map = null;
+			}
+
 			turn += 1;
 
 			anchor_mode=utils.get_bool_var('anchor_mode');
@@ -74,11 +94,11 @@ define(["require", "scripts/utils", "ui/draw", 'scripts/classes/priest', 'script
 
 					if (buy_hp && (!hppot || hppot.q < pots_minimum)) {
 						parent.buy(hp_potion, pots_to_buy);
-						set_message("Buying HP pots.");
+            set_message("Buying HP pots, slot: "+hpslot);
 					}
 					if (buy_mp && (!mppot || mppot.q < pots_minimum)) {
 						parent.buy(mp_potion, pots_to_buy);
-						set_message("Buying MP pots.");
+						set_message("Buying MP pots, slot: "+mpslot);
 					}
 				}
 			}
@@ -100,9 +120,17 @@ define(["require", "scripts/utils", "ui/draw", 'scripts/classes/priest', 'script
 			//TODO Gold Boosters
 			loot();
 
+			if(!pclass.has_attack()) {
+				//Only merchant class dosn't have attack
+
+				return;
+			}
+
 			var party = utils.get_party_players();
-			for(id in party) {
-				var partyPlayer = party[id];
+      var partyPlayer = null;
+
+			for(var id in party) {
+				partyPlayer = party[id];
 				if(pclass.is_ranged()) { // Make ranged characters stay near the leader and other party members
 					if(character.name!=party_leader && !in_attack_range(partyPlayer)) {
 						move(
@@ -119,7 +147,7 @@ define(["require", "scripts/utils", "ui/draw", 'scripts/classes/priest', 'script
 					}
 				}
 				if(pclass.is_healer()) {
-					if(!partyPlayer.rip && utils.is_missing_hp(partyPlayer, 0.5)) {
+					if(!partyPlayer.rip && utils.is_missing_hp(partyPlayer, 0.7)) {
 						if(can_heal(partyPlayer)) {
 							heal(partyPlayer);
 						}
@@ -135,16 +163,22 @@ define(["require", "scripts/utils", "ui/draw", 'scripts/classes/priest', 'script
 
 			var target=get_targeted_monster();
 			var targeted=utils.get_monsters_targeted(character);
+			if(target && last_attack > 20) {
+				last_attack = 0;
+				target = null;
+			}
 
 			//TODO xp
 			if(!target) {
 				var targetParty = false;
 				for(id in party) {
-					var partyPlayer = party[id];
-					var targetParty = get_target_of(partyPlayer);
-					if(!utils.has_range(targetParty, 100)) {
-						targetParty = false;
+					partyPlayer = party[id];
+					targetParty = get_target_of(partyPlayer);
+
+					if(targetParty == last_target) {
+						targetParty = null;
 					}
+
 					if(targetParty) break;
 				}
 				if(!targetParty) {
@@ -179,6 +213,12 @@ define(["require", "scripts/utils", "ui/draw", 'scripts/classes/priest', 'script
 					change_target(target);
 				}
 			} else {
+				if(pclass.is_tank()) {
+					if(target.target != character.name && !utils.is_missing_hp(target, 0.4)) {
+						pclass.use_tank_skill();
+					}
+				}
+
 				var runningAway = false;
 				if(pclass.is_ranged()) {
 					for(id in targeted) {
@@ -227,6 +267,8 @@ define(["require", "scripts/utils", "ui/draw", 'scripts/classes/priest', 'script
 					}
 				}
 
+				last_attack += 1;
+
 				if(!runningAway) {
 					if(!in_attack_range(target)) {
 						move(
@@ -236,7 +278,14 @@ define(["require", "scripts/utils", "ui/draw", 'scripts/classes/priest', 'script
 					} else {
 						if(can_attack(target)) {
 							set_message("Attacking");
+
+							if(pclass.is_skill_attack() && !utils.is_missing_hp(target, 0.5)) {
+								last_skill = pclass.use_skill(target, last_skill);
+							}
+
 							attack(target);
+							last_attack = 0;
+							last_target = null;
 						}
 					}
 				}

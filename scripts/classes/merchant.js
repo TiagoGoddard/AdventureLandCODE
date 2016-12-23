@@ -7,24 +7,18 @@ define(["scripts/utils"],function (utils) {
 			return true;
 		},
 		is_tank: function() {
-			return true;
+			return false;
 		},
 		is_skill_attack: function() {
-			return true;
+			return false;
 		},
 		has_attack: function() {
-			return true;
+			return false;
 		},
 		use_skill: function(target, time_since) {
-			//Cast supershot whenever your off cd (cd is 30sec).
-			if (!time_since || new Date() - time_since > 30000) {
+			if (!time_since || new Date() - time_since > 60000) {
 				time_since = new Date();
-				parent.socket.emit("ability", {
-					name: "supershot",
-					id: target.id
-				});
 			}
-
 			return time_since;
 		}
 	};

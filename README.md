@@ -4,27 +4,30 @@ My complete AdventureLandCODE
 
 ## Inside Game CODE Javascript:
 ```javascript
-var version = '0.17';
+var version = '0.19';
 
 // Handle party
 var party_leader = 'Washer';
+var merchant_name = 'Necrotico';
 
 var party_members = [
 	'Washer',
 	'Annebriwien',
-	'Arwin'
+	'Arwin',
+	'Omnilight'
 ];
 
 if(character.name == party_leader) {
 	setInterval(function(){
 		var entities=parent.entities;
-		for(i in entities) {
+		for(var i in entities) {
 			if(entities[i].type=="character" && (party_members.indexOf(entities[i].name) !== -1) && entities[i].party !== party_leader) {
 				send_party_invite(entities[i].name,0);
 			}
 		}
 	}, 10000);
 }
+
 
 function on_party_invite(name) {
 	if(!character.party && (party_members.indexOf(name) !== -1)) {
@@ -43,6 +46,25 @@ function on_combined_damage() {
 	var random_x = Math.random() * (120) - 60;
 	var random_y = Math.random() * (120) - 60;
 	move(character.real_x+random_x,character.real_y+random_y);
+}
+
+//Handle disconnect
+setInterval(function () {
+var disconnect = $(".gamebutton.clickable").html();
+	if(disconnect = 'DISCONNECT') {
+		location.reload();
+		//Use this to login:
+		//log_in(starter_vars.character,starter_vars.login,starter_vars.password);
+	}
+}, 60000);
+
+function handle_death() {
+	var respawnInterval = setInterval(function() {
+		respawn();
+		if(!character.rip) {
+			clearInterval(respawnInterval);
+		}
+	},15000);
 }
 
 // Config commands
@@ -87,6 +109,16 @@ function handle_command(command, args){
 			game_log('X:'+character.real_x, '#00ff00');
 			game_log('Y:'+character.real_y, '#00ff00');
 			break;
+		case "goto":
+			if(retrievedObject.pathfind_mode) {
+				retrievedObject.pathfind_mode = !pathfind_mode;
+				game_log('Stoping pathfind', '#0000FF');
+			} else if(args.length > 0 && args.length <= 1) {
+				retrievedObject.pathfind_destination = args[0];
+				retrievedObject.pathfind_mode = !pathfind_mode;
+				game_log('Starting pathfind', '#0000FF');
+			}
+			break;
 		case "end":
 			retrievedObject.global_runner = true;
 			break;
@@ -113,6 +145,13 @@ var starter_vars = {
 	'anchor_distance_x': 300,
 	'anchor_distance_y': 150,
 
+	'pathfind_mode': false,
+	'pathfind_destination': 'town',
+
+	'character': '',
+	'login': '',
+	'password': '',
+
 	'near_distance': 60,
 	'near_distance_negative': -60,
 
@@ -132,10 +171,71 @@ $.getScript('https://cdn.rawgit.com/TiagoGoddard/AdventureLandCODE/v'+version+'/
 		paths: {
 			utils: 'scripts/utils',
 			draw: 'ui/draw',
-			classes: 'scripts/classes'
+			classes: 'scripts/classes',
+			waypoints: 'scripts/waypoints'
 		}
 	});
 
 	requirejs(['main']);
 });
+```
+
+## PositionFinder Game CODE Javascript:
+```
+//TODO AutoBuy and Sell itens for set price
+var party_leader = 'Washer';
+
+var party_members = [
+	'Washer',
+	'Annebriwien',
+	'Arwin',
+	'Omnilight'
+];
+
+var starter_vars = {
+	'party_leader': party_leader,
+	'character': '',
+	'login': '',
+	'password': ''
+};
+
+localStorage.setItem('storageVars_'+character.name, JSON.stringify(starter_vars));
+
+//Handle disconnect
+setInterval(function () {
+var disconnect = $(".gamebutton.clickable").html();
+	if(disconnect = 'DISCONNECT') {
+		location.reload();
+		//Use this to login:
+		//log_in(starter_vars.character,starter_vars.login,starter_vars.password);
+	}
+}, 60000);
+
+function handle_death() {
+	var respawnInterval = setInterval(function() {
+		respawn();
+		if(!character.rip) {
+			clearInterval(respawnInterval);
+		}
+	},15000);
+}
+
+function handle_command(command, args){
+	var retrievedObject = JSON.parse(localStorage.getItem('storageVars_'+character.name));
+
+	switch(command){
+		case "where":
+			game_log('X:'+character.real_x, '#00ff00');
+			game_log('Y:'+character.real_y, '#00ff00');
+			break;
+		case "info":
+			show_json(parent.ctarget);
+			break;
+		case "map":
+			show_json(parent.G.maps[parent.current_map]);
+			break;
+	}
+
+	localStorage.setItem('storageVars_'+character.name, JSON.stringify(retrievedObject));
+}
 ```

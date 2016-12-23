@@ -4,24 +4,23 @@ define(["scripts/utils"],function (utils) {
 			return false;
 		},
 		is_ranged: function() {
-			return true;
+			return false;
 		},
 		is_tank: function() {
-			return true;
+			return false;
 		},
 		is_skill_attack: function() {
-			return true;
+			return false;
 		},
 		has_attack: function() {
 			return true;
 		},
 		use_skill: function(target, time_since) {
-			//Cast supershot whenever your off cd (cd is 30sec).
-			if (!time_since || new Date() - time_since > 30000) {
+			//Vanish one invis is off cd (cd is 12sec).
+			if (!time_since || new Date() - time_since > 12000) {
 				time_since = new Date();
 				parent.socket.emit("ability", {
-					name: "supershot",
-					id: target.id
+					name: "invis",
 				});
 			}
 

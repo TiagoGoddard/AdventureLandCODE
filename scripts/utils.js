@@ -20,12 +20,15 @@ define(function () {
 		},
 		get_monsters_targeted: function(entity) {
 			var targeted = [];
+			var current = null;
+
 			for(id in parent.entities) {
-				var current=parent.entities[id];
+				current = parent.entities[id];
 				if(current.type!="monster" || current.dead) continue;
 				if(current.target!=entity.name) continue;
 				targeted.push(current);
 			}
+
 			return targeted;
 		},
 		get_party_players: function() {
@@ -45,6 +48,9 @@ define(function () {
 			var party = [];
 			var targeted = [];
 
+			var entity = null;
+			var current = null;
+
 			if(character.party) {
 				for(i in entities) {
 					if(entities[i].type=="character" && entities[i].party==character.party && entities[i].name != character.name) {
@@ -52,9 +58,9 @@ define(function () {
 					}
 				}
 				for(j in party) {
-					var entity = party[j];
+					entity = party[j];
 					for(id in parent.entities) {
-						var current=parent.entities[id];
+						current=parent.entities[id];
 						if(current.type!="monster" || current.dead) continue;
 						if(current.target!=entity.name) continue;
 						targeted.push(current);
@@ -114,10 +120,16 @@ define(function () {
 			return character.real_x < x - distance_x || character.real_x > x + distance_x || character.real_y < y - distance_y || character.real_y > y + distance_y;
 		},
 		is_missing_hp: function(entity, percentage) {
-			return (entity.hp  / entity.max_hp) < percentage;
+			return ((entity.hp  / entity.max_hp) < percentage) && !character.rip;
 		},
 		is_missing_mp: function(entity, percentage) {
 			return (entity.mp  / entity.max_mp) < percentage;
+		},
+		is_inside: function(waypoint,x,y) {
+			return  	waypoint.top_left.real_x <= x && waypoint.top_left.real_y <= y
+					&&	waypoint.top_right.real_x >= x && waypoint.top_right.real_y <= y
+					&&	waypoint.bottom_left.real_x <= x && waypoint.bottom_left.real_y >= y
+					&&	waypoint.bottom_right.real_x >= x && waypoint.bottom_right.real_y >= y;
 		},
 
 		do_use_hp: function() {
