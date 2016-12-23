@@ -449,18 +449,22 @@ define(["scripts/utils"],function (utils) {
 	};
 
 	map.get_waypoint_path = function(wayp_str, wayp_des) {
-		if(wayp_str.id == wayp_des.id){
-			return false;
-		} else {
-			var curpath = [];
-			var path = map.get_waypoint_recursive(curpath, 0, null, wayp_str, wayp_des);
-			var lastWayp = path[path.length - 1];
-			if(lastWayp.id == wayp_des.id) {
-				console.log(path);
-				return path;
-			} else {
+		if(wayp_str && wayp_des) {
+			if(wayp_str.id == wayp_des.id){
 				return false;
+			} else {
+				var curpath = [];
+				var path = map.get_waypoint_recursive(curpath, 0, null, wayp_str, wayp_des);
+				var lastWayp = path[path.length - 1];
+				if(lastWayp.id == wayp_des.id) {
+					console.log(path);
+					return path;
+				} else {
+					return false;
+				}
 			}
+		} else {
+			return false;
 		}
 	};
 

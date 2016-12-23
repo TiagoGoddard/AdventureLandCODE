@@ -58,6 +58,8 @@ define(["require", "scripts/utils", "ui/draw", 'scripts/classes/priest', 'script
 		var last_skill = null;
 		var last_target = null;
 
+		var is_pathfinding = false;
+
 		var last_x = 0;
 		var last_y = 0;
 
@@ -115,7 +117,9 @@ define(["require", "scripts/utils", "ui/draw", 'scripts/classes/priest', 'script
 			//TODO Gold Boosters
 			loot();
 
-			if(pathfind_mode) {
+			if(pathfind_mode && !is_pathfinding) {
+				is_pathfinding = true;
+
 				switch(parent.current_map) {
 					case 'main':
 						cur_map = travel_main;
@@ -131,6 +135,7 @@ define(["require", "scripts/utils", "ui/draw", 'scripts/classes/priest', 'script
 					var path = cur_map.get_waypoint_path(waypointStart, waypointDest);
 
 					utils.set_var('pathfind_mode', false);
+					is_pathfinding = false;
 				}
 			}
 

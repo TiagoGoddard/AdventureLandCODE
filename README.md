@@ -4,7 +4,7 @@ My complete AdventureLandCODE
 
 ## Inside Game CODE Javascript:
 ```javascript
-var version = '0.19';
+var version = '0.21';
 
 // Handle party
 var party_leader = 'Washer';
@@ -69,6 +69,7 @@ function handle_death() {
 
 // Config commands
 function handle_command(command, args){
+	args = args.split(" ");
 	var retrievedObject = JSON.parse(localStorage.getItem('storageVars_'+character.name));
 
 	switch(command){
@@ -110,12 +111,13 @@ function handle_command(command, args){
 			game_log('Y:'+character.real_y, '#00ff00');
 			break;
 		case "goto":
+			console.log(args);
 			if(retrievedObject.pathfind_mode) {
-				retrievedObject.pathfind_mode = !pathfind_mode;
+				retrievedObject.pathfind_mode = !retrievedObject.pathfind_mode;
 				game_log('Stoping pathfind', '#0000FF');
 			} else if(args.length > 0 && args.length <= 1) {
 				retrievedObject.pathfind_destination = args[0];
-				retrievedObject.pathfind_mode = !pathfind_mode;
+				retrievedObject.pathfind_mode = !retrievedObject.pathfind_mode;
 				game_log('Starting pathfind', '#0000FF');
 			}
 			break;
@@ -221,6 +223,7 @@ function handle_death() {
 }
 
 function handle_command(command, args){
+	args = args.split(" ");
 	var retrievedObject = JSON.parse(localStorage.getItem('storageVars_'+character.name));
 
 	switch(command){
