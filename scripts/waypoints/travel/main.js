@@ -417,13 +417,17 @@ define(["scripts/utils"],function (utils) {
 		} else if(wayp_cur.id == wayp_des.id) {
 			return path;
 		} else {
-			var connectedPaths = wayp_cur.transfers.between;
+			var connectedPaths = [];
 			var possibleWayps = [];
 
-			for(var wayp in map.waypoints) {
-				for(var pathId in connectedPaths) {
-					if(wayp_cur.id != connectedPaths[pathId]) {
-						possibleWayps.push(map.waypoints[wayp]);
+			for(var connectedBet in wayp_cur.transfers) {
+				for(var wayp in map.waypoints) {
+					for(var pathId in wayp_cur.transfers[connectedBet].between) {
+						if(wayp_cur.id != connectedPaths[pathId]) {
+							if(possibleWayps.indexOf(map.waypoints[wayp]) == -1) {
+								possibleWayps.push(map.waypoints[wayp]);
+							}
+						}
 					}
 				}
 			}
