@@ -402,8 +402,13 @@ define(["scripts/utils"],function (utils) {
 	};
 
 	map.get_waypoint_recursive = function(path, count, wayp_cur, wayp_str, wayp_des) {
+		if(!wayp_cur && count == 0) {
+			wayp_cur = wayp_str;
+		} else {
+			count += 1;
+		}
 		path.push(wayp_cur);
-		count += 1;
+
 		if(count > 99) {
 			path.push(wayp_str);
 			return path;
