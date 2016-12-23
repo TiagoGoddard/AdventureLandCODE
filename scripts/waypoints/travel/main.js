@@ -375,8 +375,8 @@ define(["scripts/utils"],function (utils) {
 		var waypm = [];
 
 		for(var wayp in map.waypoints) {
-			if(wayp.monsters.indexOf(monster) > -1) {
-				waypm.push(wayp);
+			if(map.waypoints[wayp].monsters.indexOf(monster) > -1) {
+				waypm.push(map.waypoints[wayp]);
 			}
 		}
 
@@ -385,8 +385,8 @@ define(["scripts/utils"],function (utils) {
 
 	map.get_waypoint_by_id = function(id) {
 		for(var wayp in map.waypoints) {
-			if(wayp.id == id) {
-				return wayp;
+			if(map.waypoints[wayp].id == id) {
+				return map.waypoints[wayp];
 			}
 		}
 		return null;
@@ -394,8 +394,8 @@ define(["scripts/utils"],function (utils) {
 
 	map.get_waypoint = function(x,y) {
 		for(var wayp in map.waypoints) {
-			if(utils.is_inside(wayp, x, y)) {
-				return wayp;
+			if(utils.is_inside(map.waypoints[wayp], x, y)) {
+				return map.waypoints[wayp];
 			}
 		}
 		return null;
@@ -409,23 +409,23 @@ define(["scripts/utils"],function (utils) {
 			return path;
 		} else if(wayp_cur.id == wayp_str.id && count > 0) {
 			return path;
-		}	else if(wayp_cur.id == wayp_des.id) {
+		} else if(wayp_cur.id == wayp_des.id) {
 			return path;
-		}	else {
+		} else {
 			var connectedPaths = wayp_cur.transfers.between;
 			var possibleWayps = [];
 
 			for(var wayp in map.waypoints) {
 				for(var pathId in connectedPaths) {
-					if(wayp_cur.id != pathId) {
-						possibleWayps.push(wayp);
+					if(wayp_cur.id != connectedPaths[pathId]) {
+						possibleWayps.push(map.waypoints[wayp]);
 					}
 				}
 			}
 
 			var successFuturePath = [];
 			for(var possibleWayp in possibleWayps) {
-				var futurePath = map.get_waypoint_recursive(path, count, possibleWayp, wayp_str, wayp_des);
+				var futurePath = map.get_waypoint_recursive(path, count, possibleWayps[possibleWayp], wayp_str, wayp_des);
 				var lastFutureWayp = futurePath[futurePath.length - 1];
 
 				if(lastFutureWayp.id == wayp_des.id) {
@@ -436,15 +436,20 @@ define(["scripts/utils"],function (utils) {
 			var bestPath = null;
 			for(var successFutureWayp in successFuturePath) {
 				if(!bestPath) {
-					bestPath = successFutureWayp;
+					bestPath = successFuturePath[successFutureWayp];
 				} else {
-					if(successFutureWayp.length < bestPath.length) {
+					if(successFuturePath[successFutureWayp].length < bestPath.length) {
 						bestPath = successFutureWayp;
 					}
 				}
 			}
 
-			return bestPath;
+			if(bestPath) {
+				return bestPath;
+			} else {
+				path.push(wayp_str);
+				return path;
+			}
 		}
 	};
 
