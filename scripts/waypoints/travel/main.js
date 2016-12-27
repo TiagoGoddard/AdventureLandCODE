@@ -409,7 +409,7 @@ define(["scripts/utils"],function (utils) {
 		}
 		path.push(wayp_cur);
 
-		if(count > 99) {
+		if(count > 10) {
 			return null;
 		} else if(wayp_cur.id == wayp_str.id && count > 0) {
 			return null;
