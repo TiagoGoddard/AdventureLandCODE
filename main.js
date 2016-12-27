@@ -56,6 +56,7 @@ define(["require", "scripts/utils", "ui/draw", 'scripts/classes/priest', 'script
 		var last_turn = 0;
 		var last_attack = 0;
 		var last_skill = null;
+		var last_tank_skill = null;
 		var last_target = null;
 
 		var is_pathfinding = false;
@@ -112,7 +113,7 @@ define(["require", "scripts/utils", "ui/draw", 'scripts/classes/priest', 'script
 
 			if(utils.is_missing_hp(character, 0.5)) {
 				utils.do_use_hp();
-			} else if (utils.is_missing_mp(character, 0.5)) {
+			} else if (utils.is_missing_mp(character, 0.7)) {
 				utils.do_use_mp();
 			}
 
@@ -236,7 +237,7 @@ define(["require", "scripts/utils", "ui/draw", 'scripts/classes/priest', 'script
 			} else {
 				if(pclass.is_tank()) {
 					if(target.target != character.name && !utils.is_missing_hp(target, 0.4)) {
-						pclass.use_tank_skill();
+						last_tank_skill = pclass.use_tank_skill(target, last_tank_skill);
 					}
 				}
 

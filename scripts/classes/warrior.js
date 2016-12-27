@@ -27,13 +27,15 @@ define(["scripts/utils"],function (utils) {
 			return time_since;
 		},
 		use_tank_skill: function(target, time_since) {
-			//Taunt only if target hasn't been taunted and if taunt is from cd (cd is 6sec).
-			if ((!time_since || new Date() - time_since > 6000) && !target.taunted) {
-				time_since = new Date();
-				parent.socket.emit("ability", {
-					name: "taunt",
-					id: target.id
-				});
+			if(target) {
+				//Taunt only if target hasn't been taunted and if taunt is from cd (cd is 6sec).
+				if ((!time_since || new Date() - time_since > 6000) && !target.taunted) {
+					time_since = new Date();
+					parent.socket.emit("ability", {
+						name: "taunt",
+						id: target.id
+					});
+				}
 			}
 
 			return time_since;
