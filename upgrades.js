@@ -2,6 +2,7 @@ define(["require", "scripts/utils"],function (require, utils) {
 
 	var allow_upg_cmpd = utils.get_bool_var('allow_upg_cmpd');
 	var allow_item_purchase = utils.get_bool_var('allow_item_purchase');
+	var allow_continue_on_success = utils.get_bool_var('allow_continue_on_success');
 	var max_upgrade_level = utils.get_int_var('max_upgrade_level');
 	var max_compound_level = utils.get_int_var('max_compound_level');
 
@@ -17,6 +18,7 @@ define(["require", "scripts/utils"],function (require, utils) {
 
 		allow_upg_cmpd = utils.get_bool_var('allow_upg_cmpd');
 		allow_item_purchase = utils.get_bool_var('allow_item_purchase');
+		allow_continue_on_success = utils.get_bool_var('allow_continue_on_success');
 
 		if (turn >= 20) {
 			turn = 0;
@@ -31,7 +33,8 @@ define(["require", "scripts/utils"],function (require, utils) {
 			if (allow_item_purchase) {
 				for (var item_name in uwhitelist) {
 					let [item_slot, item] = utils.get_item_slot(i => i.name == item_name && i.level < max_level);
-
+					let [exists_slot, item_exists] = utils.get_item_slot(i => i.name == item_name && i.level == max_level);
+					if (exists_slot != -1 && !allow_continue_on_success) continue;
 					if (item_slot == -1) {
 						parent.buy(item_name);
 						return;

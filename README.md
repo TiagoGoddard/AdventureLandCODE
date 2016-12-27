@@ -4,7 +4,7 @@ My complete AdventureLandCODE
 
 ## Inside Game CODE Javascript:
 ```javascript
-var version = '0.28';
+var version = '0.30';
 
 // Handle party
 var party_leader = 'Washer';
@@ -144,6 +144,7 @@ var starter_vars = {
 
 	'allow_upg_cmpd': true,
 	'allow_item_purchase': true,
+	'allow_continue_on_success': false,
 	'max_upgrade_level': 8,
 	'max_compound_level': 3,
 
