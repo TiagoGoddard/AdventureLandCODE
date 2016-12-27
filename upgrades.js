@@ -34,8 +34,9 @@ define(["require", "scripts/utils"],function (require, utils) {
 				for (var id in uwhitelist) {
 					var item_name = uwhitelist[id];
 					if(parent.G.items[item_name]) {
-						let [item_slot, item] = utils.get_item_slot(i => i.name == item_name && i.level < max_level);
-						let [exists_slot, item_exists] = utils.get_item_slot(i => i.name == item_name && i.level == max_level);
+						let [item_slot, item] = utils.get_item_slot(i => i.name == item_name && i.level < max_upgrade_level);
+						let [exists_slot, item_exists] = utils.get_item_slot(i => i.name == item_name && i.level == max_upgrade_level);
+
 						if (exists_slot != -1 && !allow_continue_on_success) continue;
 						if (item_slot == -1) {
 							try {
