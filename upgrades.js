@@ -36,7 +36,12 @@ define(["require", "scripts/utils"],function (require, utils) {
 					let [exists_slot, item_exists] = utils.get_item_slot(i => i.name == item_name && i.level == max_level);
 					if (exists_slot != -1 && !allow_continue_on_success) continue;
 					if (item_slot == -1) {
-						parent.buy(item_name);
+						try {
+							parent.buy(item_name, 1);
+						} catch(err) {
+							console.error(err);
+							game_log('Can\' buy '+item_name, '#FF0000');
+						}
 						return;
 					}
 				}
@@ -59,7 +64,7 @@ define(["require", "scripts/utils"],function (require, utils) {
 
 						let [scroll_slot, scroll] = utils.get_item_slot(i => i.name === scrollname);
 						if (!scroll) {
-							parent.buy(scrollname);
+							parent.buy(scrollname, 1);
 							return;
 						}
 
@@ -84,7 +89,7 @@ define(["require", "scripts/utils"],function (require, utils) {
 
 							let [cscroll_slot, cscroll] = utils.get_item_slot(i => i.name === cscrollname);
 							if (!cscroll) {
-								parent.buy(cscrollname);
+								parent.buy(cscrollname, 1);
 								return;
 							}
 
