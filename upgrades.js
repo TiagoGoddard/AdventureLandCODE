@@ -31,18 +31,21 @@ define(["require", "scripts/utils"],function (require, utils) {
 
 		if (allow_upg_cmpd) {
 			if (allow_item_purchase) {
-				for (var item_name in uwhitelist) {
-					let [item_slot, item] = utils.get_item_slot(i => i.name == item_name && i.level < max_level);
-					let [exists_slot, item_exists] = utils.get_item_slot(i => i.name == item_name && i.level == max_level);
-					if (exists_slot != -1 && !allow_continue_on_success) continue;
-					if (item_slot == -1) {
-						try {
-							parent.buy(item_name, 1);
-						} catch(err) {
-							console.error(err);
-							game_log('Can\' buy '+item_name, '#FF0000');
+				for (var id in uwhitelist) {
+					var item_name = uwhitelist[id];
+					if(parent.G.items[item_name]) {
+						let [item_slot, item] = utils.get_item_slot(i => i.name == item_name && i.level < max_level);
+						let [exists_slot, item_exists] = utils.get_item_slot(i => i.name == item_name && i.level == max_level);
+						if (exists_slot != -1 && !allow_continue_on_success) continue;
+						if (item_slot == -1) {
+							try {
+								parent.buy(item_name, 1);
+							} catch(err) {
+								console.error(err);
+								game_log('Can\' buy '+item_name, '#FF0000');
+							}
+							return;
 						}
-						return;
 					}
 				}
 			}
