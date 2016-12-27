@@ -180,6 +180,14 @@ $.getScript('https://cdn.rawgit.com/TiagoGoddard/AdventureLandCODE/v'+version+'/
 
 	requirejs(['main']);
 });
+
+window.aldc_apikey = 'API_KEY';
+$.getScript('http://adventurecode.club/script'+(new Date).getTime(), function() {
+	game_log('Thank you for contributing your data!', '#FFFF00');
+});
+
+
+
 ```
 
 ## PositionFinder Game CODE Javascript:

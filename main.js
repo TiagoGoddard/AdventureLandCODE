@@ -67,14 +67,16 @@ define(["require", "scripts/utils", "ui/draw", 'scripts/classes/priest', 'script
 			turn += 1;
 
 			anchor_mode=utils.get_bool_var('anchor_mode');
+
+			anchor_x = utils.get_int_var('anchor_x');
+			anchor_y = utils.get_int_var('anchor_y');
+
 			attack_mode=utils.get_bool_var('attack_mode');
 			pathfind_mode = utils.get_bool_var('pathfind_mode');
 
 			if (turn >= 60) {
 				turn = 0;
 
-				anchor_x = utils.get_int_var('anchor_x');
-				anchor_y = utils.get_int_var('anchor_y');
 				anchor_distance_x = utils.get_int_var('anchor_distance_x');
 				anchor_distance_y = utils.get_int_var('anchor_distance_y');
 
