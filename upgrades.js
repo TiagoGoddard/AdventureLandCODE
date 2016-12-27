@@ -1,8 +1,9 @@
 define(["require", "scripts/utils"],function (require, utils) {
 
 	var allow_upg_cmpd = utils.get_bool_var('allow_upg_cmpd');
-	var max_upgrade_level = utils.get_int_var('max_upgrade_level');;
-	var max_compound_level = utils.get_int_var('max_compound_level');;
+	var allow_item_purchase = utils.get_bool_var('allow_item_purchase');
+	var max_upgrade_level = utils.get_int_var('max_upgrade_level');
+	var max_compound_level = utils.get_int_var('max_compound_level');
 
 	var swhitelist = utils.get_var('swhitelist');
 	var ewhitelist = utils.get_var('ewhitelist');
@@ -15,6 +16,7 @@ define(["require", "scripts/utils"],function (require, utils) {
 		turn += 1;
 
 		allow_upg_cmpd = utils.get_bool_var('allow_upg_cmpd');
+		allow_item_purchase = utils.get_bool_var('allow_item_purchase');
 
 		if (turn >= 20) {
 			turn = 0;
@@ -26,11 +28,22 @@ define(["require", "scripts/utils"],function (require, utils) {
 		}
 
 		if (allow_upg_cmpd) {
+			if (allow_item_purchase) {
+				for (var item_name in uwhitelist) {
+					let [item_slot, item] = utils.get_item_slot(i => i.name == item_name && i.level < max_level);
+
+					if (item_slot == -1) {
+						parent.buy(item_name);
+						return;
+					}
+				}
+			}
+
 			for (let i = 0; i < character.items.length; i++) {
 				let c = character.items[i];
 				if (c) {
 					if (uwhitelist.includes(c.name) && c.level < max_upgrade_level) {
-						//Upgrade
+						//Buy needed scrolls
 						let grades = utils.get_item_info(c).grades;
 						let scrollname;
 
@@ -47,6 +60,7 @@ define(["require", "scripts/utils"],function (require, utils) {
 							return;
 						}
 
+						//Upgrade
 						parent.socket.emit('upgrade', {
 							item_num: i,
 							scroll_num: scroll_slot,

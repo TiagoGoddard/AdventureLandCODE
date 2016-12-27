@@ -143,6 +143,7 @@ var starter_vars = {
 	'pots_to_buy': 1000,
 
 	'allow_upg_cmpd': true,
+	'allow_item_purchase': true,
 	'max_upgrade_level': 8,
 	'max_compound_level': 3,
 
