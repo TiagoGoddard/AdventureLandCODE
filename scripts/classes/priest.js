@@ -7,7 +7,7 @@ define(["scripts/utils"],function (utils) {
 			return true;
 		},
 		is_tank: function() {
-			return true;
+			return false;
 		},
 		is_skill_attack: function() {
 			return true;
