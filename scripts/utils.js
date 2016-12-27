@@ -78,6 +78,23 @@ define(function () {
 
 			return [-1, null];
 		},
+		get_item_slot: function(filter, search_slot) {
+			let slot = search_slot;
+			if (!slot)
+				slot = 0
+
+			for (let i = slot; i < character.items.length; i++) {
+				let item = character.items[i];
+
+				if (item && filter(item))
+				return [i, character.items[i]];
+			}
+
+			return [-1, null];
+		},
+		get_item_info: function(item) {
+  			return parent.G.items[item.name];
+		},
 
 		set_var: function(desired, value) {
 			var retrievedObject = JSON.parse(localStorage.getItem('storageVars_'+character.name));

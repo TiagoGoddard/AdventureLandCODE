@@ -132,6 +132,7 @@ function handle_command(command, args){
 var starter_vars = {
 	'global_runner': false,
 	'quited_runner': false,
+	'quited_upgrade_runner': false,
 
 	'allow_potions_purchase': true,
 	'buy_hp': true,
@@ -140,6 +141,18 @@ var starter_vars = {
 	'mp_potion': 'mpot0',
 	'pots_minimum': 50,
 	'pots_to_buy': 1000,
+
+	'allow_upg_cmpd': true,
+	'max_upgrade_level': 8,
+	'max_compound_level': 3,
+
+	'swhitelist': [],
+	'ewhitelist': [],
+	'uwhitelist': [],
+	'cwhitelist': ['wbook0', 'intamulet', 'stramulet', 'dexamulet', 'intearring', 'strearring', 'dexearring', 'hpbelt', 'hpamulet', 'ringsj', 'amuletofm', 'orbofstr', 'orbofint', 'orbofres', 'orbofhp'],
+
+	'allow_exchanging': true,
+	'allow_selling': true,
 
 	'anchor_mode': false,
 	'anchor_x': 1100,
@@ -171,6 +184,7 @@ $.getScript('https://cdn.rawgit.com/TiagoGoddard/AdventureLandCODE/v'+version+'/
 	requirejs.config({
 		baseUrl: 'https://cdn.rawgit.com/TiagoGoddard/AdventureLandCODE/v'+version+'/',
 		paths: {
+			upgrade: 'scripts/upgrade',
 			utils: 'scripts/utils',
 			draw: 'ui/draw',
 			classes: 'scripts/classes',
@@ -179,6 +193,7 @@ $.getScript('https://cdn.rawgit.com/TiagoGoddard/AdventureLandCODE/v'+version+'/
 	});
 
 	requirejs(['main']);
+	requirejs(['upgrades']);
 });
 
 window.aldc_apikey = 'API_KEY';
