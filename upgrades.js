@@ -26,8 +26,6 @@ define(["require", "scripts/utils"],function (require, utils) {
 		}
 
 		if (allow_upg_cmpd) {
-			seuc_merge(max_upgrade_level, max_compound_level);
-
 			for (let i = 0; i < character.items.length; i++) {
 				let c = character.items[i];
 				if (c) {
