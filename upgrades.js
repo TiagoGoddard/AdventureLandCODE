@@ -41,7 +41,7 @@ define(["require", "scripts/utils"],function (require, utils) {
 						else
 							scrollname = 'scroll2';
 
-						let [scroll_slot, scroll] = utils.find_item_filter(i => i.name === scrollname);
+						let [scroll_slot, scroll] = utils.get_item_slot(i => i.name === scrollname);
 						if (!scroll) {
 							parent.buy(scrollname);
 							return;
@@ -56,8 +56,8 @@ define(["require", "scripts/utils"],function (require, utils) {
 						return;
 					} else if (cwhitelist.includes(c.name) && c.level < max_compound_level) {
 						//Compound
-						let [item2_slot, item2] = utils.find_item_filter((item) => c.name === item.name && c.level === item.level, i + 1);
-						let [item3_slot, item3] = utils.find_item_filter((item) => c.name === item.name && c.level === item.level, item2_slot + 1);
+						let [item2_slot, item2] = utils.get_item_slot((item) => c.name === item.name && c.level === item.level, i + 1);
+						let [item3_slot, item3] = utils.get_item_slot((item) => c.name === item.name && c.level === item.level, item2_slot + 1);
 						if (item2 && item3) {
 							let cscrollname;
 							if (c.level < 2)
@@ -65,7 +65,7 @@ define(["require", "scripts/utils"],function (require, utils) {
 							else
 								cscrollname = 'cscroll1';
 
-							let [cscroll_slot, cscroll] = utils.find_item_filter(i => i.name === cscrollname);
+							let [cscroll_slot, cscroll] = utils.get_item_slot(i => i.name === cscrollname);
 							if (!cscroll) {
 								parent.buy(cscrollname);
 								return;
