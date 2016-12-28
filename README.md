@@ -4,7 +4,7 @@ My complete AdventureLandCODE
 
 ## Inside Game CODE Javascript:
 ```javascript
-var version = '0.34';
+var version = '0.35';
 
 // Handle party
 var party_leader = 'Washer';
@@ -83,11 +83,15 @@ function handle_command(command, args){
 
 					if(args.length > 0 && args.length <= 2) {
 						if(args.length == 1) {
-							retrievedObject.anchor_distance_x = parseInt(args[0]);
-							retrievedObject.anchor_distance_y = parseInt(args[0]);
+							if(args[0]) {
+								retrievedObject.anchor_distance_x = parseInt(args[0]);
+								retrievedObject.anchor_distance_y = parseInt(args[0]);
+							}
 						} else {
-							retrievedObject.anchor_distance_x = parseInt(args[0]);
-							retrievedObject.anchor_distance_y = parseInt(args[1]);
+							if(args[0] && args[1]) {
+								retrievedObject.anchor_distance_x = parseInt(args[0]);
+								retrievedObject.anchor_distance_y = parseInt(args[1]);
+							}
 						}
 					}
 				} else {
@@ -99,8 +103,10 @@ function handle_command(command, args){
 			break;
 		case "near":
 			if(args.length > 0 && args.length <= 1) {
-				retrievedObject.near_distance = parseInt(args[0]);
-				retrievedObject.near_distance_negative = 0 - near_distance;
+				if(args[0]) {
+					retrievedObject.near_distance = parseInt(args[0]);
+					retrievedObject.near_distance_negative = 0 - retrievedObject.near_distance;
+				}
 			}
 			break;
 		case "attack":
@@ -142,11 +148,11 @@ var starter_vars = {
 	'pots_minimum': 50,
 	'pots_to_buy': 1000,
 
-	'allow_upg_cmpd': true,
 	'allow_item_purchase': true,
-	'allow_continue_on_success': false,
+	'stop_on_success': true,
 	'max_upgrade_level': 8,
 	'max_compound_level': 3,
+	'min_upg_gold': 1000000,
 
 	'swhitelist': [],
 	'ewhitelist': [],
@@ -156,11 +162,11 @@ var starter_vars = {
 	'allow_exchanging': true,
 	'allow_selling': true,
 
-	'anchor_mode': false,
-	'anchor_x': 1100,
-	'anchor_y': 150,
-	'anchor_distance_x': 300,
-	'anchor_distance_y': 150,
+    'anchor_mode': true,
+    'anchor_x': 1220,
+    'anchor_y': 678,
+    'anchor_distance_x': 150,
+    'anchor_distance_y': 300,
 
 	'pathfind_mode': false,
 	'pathfind_destination': 'town',
@@ -174,9 +180,9 @@ var starter_vars = {
 
 	'party_leader': party_leader,
 
-	'attack_mode': true,
-	'min_xp': 800,
-	'max_att': 79
+    'attack_mode': true,
+    'min_xp': 950,
+    'max_att': 120
 };
 
 // Put the config into storage
@@ -199,10 +205,19 @@ $.getScript('https://cdn.rawgit.com/TiagoGoddard/AdventureLandCODE/v'+version+'/
 });
 
 window.aldc_apikey = 'API_KEY';
-$.getScript('http://adventurecode.club/script'+(new Date).getTime(), function() {
-	game_log('Thank you for contributing your data!', '#FFFF00');
-});
+window.aldc_use_upgrade = true
+window.aldc_use_compound = true;
+window.aldc_use_exchange = true;
 
+// USAGE INFORMATION:
+// When aldc_use_upgrade = true, send upgrade data when using parent.upgradeit(item_name, max_level, options_object).
+//      options_object defaults to { buy_item: false, buy_scrolls: true, stop_on_success: false }
+// When aldc_use_compound = true, send compound data when using parent.compoundit(item_name, item_level_to_compound); i.e compoundit('hpbelt', 0) tries to create an hpbelt+1
+// When aldc_use_exchange = true, send exchange data when using parent.exchangeit(inventory_slot)
+
+$.getScript('http://adventurecode.club/script?t='+(new Date).getTime(), function() {
+    game_log('Thank you for contributing your drop data!', '#FFFF00');
+});
 
 
 ```

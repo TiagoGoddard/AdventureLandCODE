@@ -25,8 +25,8 @@ define(["require", "scripts/utils", "ui/draw", 'scripts/classes/priest', 'script
 	}
 
 	if(pclass) {
-		var anchor_mode=true;
-		var attack_mode=true;
+		var anchor_mode=utils.get_bool_var('anchor_mode');
+		var	attack_mode=utils.get_bool_var('attack_mode');
 
 		var party_leader = utils.get_var('party_leader');
 
