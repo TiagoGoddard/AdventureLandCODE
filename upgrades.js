@@ -45,8 +45,8 @@ define(["require", "scripts/utils"],function (require, utils) {
 						let [item3_slot, item3] = utils.get_item_slot((item) => c.name === item.name && c.level === item.level, item2_slot + 1);
 						if (item2 && item3) {
 							parent.compoundit(i.name, c.level);
+							return;
 						}
-						return;
 					} else if (c && ewhitelist.includes(c.name)) {
 						//Exchange
 						let [item_slot, item] = utils.get_item_slot(i => i.name == c.name);
