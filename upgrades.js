@@ -49,7 +49,7 @@ define(["require", "scripts/utils"],function (require, utils) {
 						return;
 					} else if (c && ewhitelist.includes(c.name)) {
 						//Exchange
-						let [item_slot, item] = utils.get_item_slot(i => i.name == item_name);
+						let [item_slot, item] = utils.get_item_slot(i => i.name == c.name);
 						parent.exchangeit(item_slot);
 						return;
 					} else if (c && swhitelist.includes(c.name)) {
