@@ -37,7 +37,7 @@ define(["require", "scripts/utils"],function (require, utils) {
 				if (c) {
 					if (uwhitelist.includes(c.name) && c.level < max_upgrade_level) {
 						//Upgrade
-						parent.upgradeit(c.name, c.level, { buy_item: allow_item_purchase, buy_scrolls: true, stop_on_success: stop_on_success }).
+						parent.upgradeit(c.name, c.level, { buy_item: allow_item_purchase, buy_scrolls: true, stop_on_success: stop_on_success });
 						return;
 					} else if (cwhitelist.includes(c.name) && c.level < max_compound_level) {
 						//Compound
