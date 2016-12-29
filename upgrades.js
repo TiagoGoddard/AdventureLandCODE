@@ -35,10 +35,9 @@ define(["require", "scripts/utils"],function (require, utils) {
 			for (let i = 0; i < character.items.length; i++) {
 				let c = character.items[i];
 				if (c) {
-					if (uwhitelist.includes(c.name) && c.level < max_upgrade_level) {
+					if (uwhitelist.includes(c.name)) {
 						//Upgrade
-						parent.upgradeit(c.name, c.level, { buy_item: allow_item_purchase, buy_scrolls: true, stop_on_success: stop_on_success });
-						return;
+						parent.upgradeit(c.name, max_upgrade_level, { buy_item: allow_item_purchase, buy_scrolls: true, stop_on_success: stop_on_success });
 					} else if (cwhitelist.includes(c.name) && c.level < max_compound_level) {
 						//Compound
 						let [item2_slot, item2] = utils.get_item_slot((item) => c.name === item.name && c.level === item.level, i + 1);
