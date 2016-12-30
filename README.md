@@ -4,7 +4,7 @@ My complete AdventureLandCODE
 
 ## Inside Game CODE Javascript:
 ```javascript
-var version = '0.38';
+var version = '0.40';
 
 // Handle party
 var party_leader = 'Washer';
@@ -155,8 +155,8 @@ var starter_vars = {
 	'min_upg_gold': 1000000,
 
 	'swhitelist': [],
-	'ewhitelist': [],
-	'uwhitelist': [],
+	'ewhitelist': ['gem0','armorbox','weaponbox','candycane','mistletoe','ornament'],
+	'uwhitelist': ['quiver'],
 	'cwhitelist': ['wbook0', 'intamulet', 'stramulet', 'dexamulet', 'intearring', 'strearring', 'dexearring', 'hpbelt', 'hpamulet', 'ringsj', 'amuletofm', 'orbofstr', 'orbofint', 'orbofres', 'orbofhp', 'orbofsc'],
 
 	'allow_exchanging': true,
