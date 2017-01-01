@@ -407,6 +407,7 @@ define(["scripts/utils"],function (utils) {
 		} else {
 			count += 1;
 		}
+
 		if(path.indexOf(wayp_cur) > -1) {
 			return null;
 		} else {
