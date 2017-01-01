@@ -46,14 +46,15 @@ define(["require", "scripts/utils"],function (require, utils) {
 							parent.compoundit(i.name, c.level);
 						}
 					} else if (c && ewhitelist.includes(c.name)) {
-						//Exchange
-						let [item_slot, item] = utils.get_item_slot(i => i.name == c.name);
-						parent.exchangeit(item_slot);
-						return;
+						let baseitem = parent.G.items[c.name];
+						if(!baseitem.e || baseitem.e > c.q) {
+							//Exchange
+							let [item_slot, item] = utils.get_item_slot(i => i.name == c.name);
+							parent.exchangeit(item_slot);
+						}
 					} else if (c && swhitelist.includes(c.name)) {
 						//Sell
 						sell(i);
-						return;
 					}
 				}
 			}

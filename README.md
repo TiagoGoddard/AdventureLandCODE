@@ -4,7 +4,7 @@ My complete AdventureLandCODE
 
 ## Inside Game CODE Javascript:
 ```javascript
-var version = '0.40';
+var version = '0.41';
 
 // Handle party
 var party_leader = 'Washer';
@@ -143,20 +143,20 @@ var starter_vars = {
 	'allow_potions_purchase': true,
 	'buy_hp': true,
 	'buy_mp': true,
-	'hp_potion': 'hpot0',
-	'mp_potion': 'mpot0',
+	'hp_potion': 'hpot1',
+	'mp_potion': 'mpot1',
 	'pots_minimum': 50,
 	'pots_to_buy': 1000,
 
 	'allow_item_purchase': true,
 	'stop_on_success': true,
-	'max_upgrade_level': 8,
+	'max_upgrade_level': 7,
 	'max_compound_level': 3,
 	'min_upg_gold': 1000000,
 
 	'swhitelist': [],
 	'ewhitelist': ['gem0','armorbox','weaponbox','candycane','mistletoe','ornament'],
-	'uwhitelist': ['quiver'],
+	'uwhitelist': ['quiver','xmaspants', 'xmasshoes','xmassweater','xmashat','mittens'],
 	'cwhitelist': ['wbook0', 'intamulet', 'stramulet', 'dexamulet', 'intearring', 'strearring', 'dexearring', 'hpbelt', 'hpamulet', 'ringsj', 'amuletofm', 'orbofstr', 'orbofint', 'orbofres', 'orbofhp', 'orbofsc'],
 
 	'allow_exchanging': true,
@@ -170,10 +170,6 @@ var starter_vars = {
 
 	'pathfind_mode': false,
 	'pathfind_destination': 'town',
-
-	'character': '',
-	'login': '',
-	'password': '',
 
 	'near_distance': 60,
 	'near_distance_negative': -60,
