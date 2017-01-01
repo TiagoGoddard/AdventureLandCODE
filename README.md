@@ -4,7 +4,7 @@ My complete AdventureLandCODE
 
 ## Inside Game CODE Javascript:
 ```javascript
-var version = '0.43';
+var version = '1.0.1';
 
 // Handle party
 var party_leader = 'Washer';
@@ -155,8 +155,8 @@ var starter_vars = {
 	'min_upg_gold': 1000000,
 
 	'swhitelist': [],
-	'ewhitelist': ['gem0','armorbox','weaponbox','candycane','mistletoe','ornament'],
-	'uwhitelist': ['quiver','xmaspants', 'xmasshoes','xmassweater','xmashat','mittens'],
+	'ewhitelist': ['gem0','armorbox','weaponbox','candycane','mistletoe','ornament','armorbox','weaponbox','jewellerybox','candy1','candy0'],
+	'uwhitelist': ['quiver','xmaspants', 'xmasshoes', 'xmassweater', 'xmashat', 'mittens'],
 	'cwhitelist': ['wbook0', 'intamulet', 'stramulet', 'dexamulet', 'intearring', 'strearring', 'dexearring', 'hpbelt', 'hpamulet', 'ringsj', 'amuletofm', 'orbofstr', 'orbofint', 'orbofres', 'orbofhp', 'orbofsc'],
 
 	'allow_exchanging': true,
@@ -201,7 +201,7 @@ $.getScript('https://cdn.rawgit.com/TiagoGoddard/AdventureLandCODE/v'+version+'/
 });
 
 window.aldc_apikey = 'API_KEY';
-window.aldc_use_upgrade = true
+window.aldc_use_upgrade = true;
 window.aldc_use_compound = true;
 window.aldc_use_exchange = true;
 
