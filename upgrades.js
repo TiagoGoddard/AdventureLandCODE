@@ -47,7 +47,7 @@ define(["require", "scripts/utils"],function (require, utils) {
 						}
 					} else if (c && ewhitelist.includes(c.name)) {
 						let baseitem = parent.G.items[c.name];
-						if(!baseitem.e || baseitem.e > c.q) {
+						if(baseitem && baseitem.e && c.q > baseitem.e) {
 							//Exchange
 							let [item_slot, item] = utils.get_item_slot(i => i.name == c.name);
 							parent.exchangeit(item_slot);

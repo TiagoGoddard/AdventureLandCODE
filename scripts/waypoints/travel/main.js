@@ -401,7 +401,7 @@ define(["scripts/utils"],function (utils) {
 		return null;
 	};
 
-	map.get_waypoint_recursive = function(path, count, wayp_cur, wayp_str, wayp_des) {
+	map.get_waypoint_recursive = function(path, count, wayp_cur, wayp_str, wayp_des, last_wayp, last_last_wayp) {
 		if(!wayp_cur && count == 0) {
 			wayp_cur = wayp_str;
 		} else {
@@ -415,6 +415,8 @@ define(["scripts/utils"],function (utils) {
 			return null;
 		} else if(wayp_cur.id == wayp_des.id) {
 			return path;
+		} else if(wayp_cur.id == last_wayp.id || wayp_cur.id == last_last_wayp.id) {
+			return null;
 		} else {
 			var possibleWayps = [];
 
@@ -432,7 +434,7 @@ define(["scripts/utils"],function (utils) {
 
 			var successFuturePath = [];
 			for(var possibleWayp in possibleWayps) {
-				var futurePath = map.get_waypoint_recursive(path, count, possibleWayps[possibleWayp], wayp_str, wayp_des);
+				var futurePath = map.get_waypoint_recursive(path, count, possibleWayps[possibleWayp], wayp_str, wayp_des, wayp_cur, last_wayp);
 				if(futurePath) {
 					var lastFutureWayp = futurePath[futurePath.length - 1];
 
