@@ -468,12 +468,16 @@ define(["scripts/utils"],function (utils) {
 			} else {
 				var curpath = [];
 				var path = map.get_waypoint_recursive(curpath, 0, null, wayp_str, wayp_des);
-				var lastWayp = path[path.length - 1];
-				if(lastWayp.id == wayp_des.id) {
-					console.log(path);
-					return path;
+				if(path) {
+					var lastWayp = path[path.length - 1];
+					if(lastWayp.id == wayp_des.id) {
+						console.log(path);
+						return path;
+					} else {
+						return false;
+					}
 				} else {
-					return false;
+					return null;
 				}
 			}
 		} else {
