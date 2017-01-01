@@ -50,6 +50,7 @@ define(["require", "scripts/utils", "ui/draw", 'scripts/classes/priest', 'script
 		var pots_to_buy = utils.get_int_var('pots_to_buy');
 
 		var pathfind_mode = utils.get_bool_var('pathfind_mode');
+		var pathfind_where_mode = utils.get_bool_var('pathfind_where_mode');
 		var pathfind_destination = utils.get_var('pathfind_destination');
 
 		var turn = 0;
@@ -67,13 +68,14 @@ define(["require", "scripts/utils", "ui/draw", 'scripts/classes/priest', 'script
 		var mainInterval = setInterval(function(){
 			turn += 1;
 
-			anchor_mode=utils.get_bool_var('anchor_mode');
+			anchor_mode = utils.get_bool_var('anchor_mode');
 
 			anchor_x = utils.get_int_var('anchor_x');
 			anchor_y = utils.get_int_var('anchor_y');
 
-			attack_mode=utils.get_bool_var('attack_mode');
+			attack_mode = utils.get_bool_var('attack_mode');
 			pathfind_mode = utils.get_bool_var('pathfind_mode');
+			pathfind_where_mode = utils.get_bool_var('pathfind_where_mode');
 
 			if (turn >= 60) {
 				turn = 0;
@@ -133,19 +135,43 @@ define(["require", "scripts/utils", "ui/draw", 'scripts/classes/priest', 'script
 				if(cur_map) {
 					pathfind_destination = utils.get_var('pathfind_destination');
 
-					var waypointStart = cur_map.get_waypoint_by_id('town');
+					var waypointStart = cur_map.get_waypoint(character.real_x,character.real_y);
 					var waypointDest = cur_map.get_waypoint_by_id(pathfind_destination);
 					var path = cur_map.get_waypoint_path(waypointStart, waypointDest);
 
 					console.log(path);
 
+					pathfind_mode = false;
 					utils.set_var('pathfind_mode', false);
 					is_pathfinding = false;
 				}
 			}
 
+			if(pathfind_where_mode && !is_pathfinding) {
+				is_pathfinding = true;
+
+				switch(parent.current_map) {
+					case 'main':
+						cur_map = travel_main;
+						break;
+					default:
+						cur_map = null;
+				}
+
+				if(cur_map) {
+					var cur_wayp = cur_map.get_waypoint(character.real_x,character.real_y);
+					if(cur_wayp) {
+						game_log('You are in:'+cur_wayp.id, '#0000FF');
+					}
+				}
+
+				pathfind_where_mode = false;
+				utils.set_var('pathfind_where_mode', false);
+				is_pathfinding = false;
+			}
+
 			if(!pclass.has_attack()) {
-				//Only merchant class dosn't have attack
+				//Merchant can't attack, so shouldn't really try
 
 				return;
 			}

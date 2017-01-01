@@ -4,7 +4,7 @@ My complete AdventureLandCODE
 
 ## Inside Game CODE Javascript:
 ```javascript
-var version = '1.0.1';
+var version = '1.0.4';
 
 // Handle party
 var party_leader = 'Washer';
@@ -112,12 +112,7 @@ function handle_command(command, args){
 		case "attack":
 			retrievedObject.attack_mode = !retrievedObject.attack_mode;
 			break;
-		case "where":
-			game_log('X:'+character.real_x, '#00ff00');
-			game_log('Y:'+character.real_y, '#00ff00');
-			break;
 		case "goto":
-			console.log(args);
 			if(retrievedObject.pathfind_mode) {
 				retrievedObject.pathfind_mode = !retrievedObject.pathfind_mode;
 				game_log('Stoping pathfind', '#0000FF');
@@ -125,6 +120,14 @@ function handle_command(command, args){
 				retrievedObject.pathfind_destination = args[0];
 				retrievedObject.pathfind_mode = !retrievedObject.pathfind_mode;
 				game_log('Starting pathfind', '#0000FF');
+			}
+			break;
+		case "where":
+			if(retrievedObject.pathfind_where_mode) {
+				retrievedObject.pathfind_where_mode = !retrievedObject.pathfind_where_mode;
+			} else if(args.length > 0 && args.length <= 1) {
+				retrievedObject.pathfind_destination = args[0];
+				retrievedObject.pathfind_where_mode = !retrievedObject.pathfind_where_mode;
 			}
 			break;
 		case "end":
