@@ -407,7 +407,11 @@ define(["scripts/utils"],function (utils) {
 		} else {
 			count += 1;
 		}
-		path.push(wayp_cur);
+		if(path.indexOf(wayp_cur) > -1) {
+			return null;
+		} else {
+			path.push(wayp_cur);
+		}
 
 		if(count > 10) {
 			return null;
@@ -473,7 +477,6 @@ define(["scripts/utils"],function (utils) {
 				if(path) {
 					var lastWayp = path[path.length - 1];
 					if(lastWayp.id == wayp_des.id) {
-						console.log(path);
 						return path;
 					} else {
 						return false;

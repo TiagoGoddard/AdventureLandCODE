@@ -137,6 +137,8 @@ define(["require", "scripts/utils", "ui/draw", 'scripts/classes/priest', 'script
 					var waypointDest = cur_map.get_waypoint_by_id(pathfind_destination);
 					var path = cur_map.get_waypoint_path(waypointStart, waypointDest);
 
+					console.log(path);
+
 					utils.set_var('pathfind_mode', false);
 					is_pathfinding = false;
 				}
