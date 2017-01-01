@@ -402,6 +402,24 @@ define(["scripts/utils"],function (utils) {
 	};
 
 	map.get_waypoint_recursive = function(path, count, wayp_cur, wayp_str, wayp_des, last_wayp, last_last_wayp) {
+		if(path.length > 1) {
+			var correctPath = [];
+			var last_path_wayp = null;
+			for(var pathId in path) {
+				var path_wayp = path[pathId];
+				if(last_path_wayp) {
+					if(last_path_wayp.between.indexOf(path_wayp.id) > -1) {
+						correctPath.push(path_wayp);
+					}
+				} else {
+					correctPath.push(path_wayp);
+					last_path_wayp = path_wayp;
+				}
+			}
+
+			path = correctPath;
+		}
+
 		if(!wayp_cur && count == 0) {
 			wayp_cur = wayp_str;
 		} else {
