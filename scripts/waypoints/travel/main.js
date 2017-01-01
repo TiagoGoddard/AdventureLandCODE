@@ -439,6 +439,9 @@ define(["scripts/utils"],function (utils) {
 
 			var successFuturePath = [];
 			for(var possibleWayp in possibleWayps) {
+				if(path.indexOf(possibleWayp) > -1) {
+					continue;
+				}
 				var futurePath = map.get_waypoint_recursive(path, count, possibleWayps[possibleWayp], wayp_str, wayp_des, wayp_cur, last_wayp);
 				if(futurePath) {
 					var lastFutureWayp = futurePath[futurePath.length - 1];

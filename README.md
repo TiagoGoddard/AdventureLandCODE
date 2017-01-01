@@ -172,6 +172,7 @@ var starter_vars = {
     'anchor_distance_y': 300,
 
 	'pathfind_mode': false,
+    'pathfind_where_mode': false,
 	'pathfind_destination': 'town',
 
 	'near_distance': 60,
