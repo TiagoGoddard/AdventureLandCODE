@@ -152,7 +152,7 @@ define(["require", "scripts/utils", "scripts/graph", "ui/draw", 'scripts/classes
 							}
 
 							var c_wayp = future_path;
-							future_path = path.shift();
+							future_path = cur_map.get_waypoint_by_id(path.shift());
 
 							if(future_path.id != waypointStart.id) {
 								var d_transfer = utils.get_desired_transfers(c_wayp.id, future_path.id, c_wayp.transfers);
