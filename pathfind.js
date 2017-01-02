@@ -8,8 +8,6 @@ define(["require", "scripts/utils", "scripts/graph", 'scripts/waypoints/travel/m
 
 	var turn = 0;
 
-	var is_pathfinding = false;
-
 	var last_x = 0;
 	var last_y = 0;
 
@@ -25,9 +23,7 @@ define(["require", "scripts/utils", "scripts/graph", 'scripts/waypoints/travel/m
 		pathfind_mode = utils.get_bool_var('pathfind_mode');
 		pathfind_where_mode = utils.get_bool_var('pathfind_where_mode');
 
-		if(pathfind_mode && !is_pathfinding) {
-			is_pathfinding = true;
-
+		if(pathfind_mode) {
 			switch(parent.current_map) {
 				case 'main':
 					cur_map = travel_main;
@@ -107,12 +103,10 @@ define(["require", "scripts/utils", "scripts/graph", 'scripts/waypoints/travel/m
 
 				pathfind_mode = false;
 				utils.set_var('pathfind_mode', false);
-				is_pathfinding = false;
 			}
 		}
 
-		if(pathfind_where_mode && !is_pathfinding) {
-			is_pathfinding = true;
+		if(pathfind_where_mode) {
 
 			switch(parent.current_map) {
 				case 'main':
@@ -131,7 +125,6 @@ define(["require", "scripts/utils", "scripts/graph", 'scripts/waypoints/travel/m
 
 			pathfind_where_mode = false;
 			utils.set_var('pathfind_where_mode', false);
-			is_pathfinding = false;
 		}
 
 	},1000/4);
