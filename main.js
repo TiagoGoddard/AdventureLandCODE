@@ -140,7 +140,7 @@ define(["require", "scripts/utils", "scripts/graph", "ui/draw", 'scripts/classes
 					var waypointDest = cur_map.get_waypoint_by_id(pathfind_destination);
 
 					if(waypointStart && waypointDest) {
-						var path = graph.get_waypoint_path(cur_map.get_graph_map(), waypointStart.id, waypointDest.id);
+						var path = graph.find_shortest_path(cur_map.get_graph_map(), waypointStart.id, waypointDest.id);
 						console.log(path);
 					}
 				}

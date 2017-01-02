@@ -103,7 +103,7 @@ define(["scripts/utils"], function (utils) {
 		}
 	}
 
-	Graph.findShortestPath = function (map, start, end) {
+	Graph.find_shortest_path = function (map, start, end) {
 		return Graph.findShortestPathNodes(map, [start, end]);
 	}
 

@@ -414,7 +414,9 @@ define(["scripts/utils"],function (utils) {
 				var transfer = wayp.transfers[wayp_transfer_id];
 				for(var transfer_between_id in transfer.between) {
 					var between = transfer.between[transfer_between_id];
-					wayp_map[between] = map.get_distance_between(wayp.id,between);
+					if(wayp_map[between] != wayp.id) {
+						wayp_map[between] = map.get_distance_between(wayp.id,between);
+					}
 				}
 			}
 			graph_map[wayp.id] = wayp_map;
