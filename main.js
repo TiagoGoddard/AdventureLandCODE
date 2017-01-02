@@ -1,4 +1,4 @@
-define(["require", "scripts/utils", "ui/draw", 'scripts/classes/priest', 'scripts/classes/warrior', 'scripts/classes/ranger', 'scripts/classes/rougue', 'scripts/classes/mage', 'scripts/classes/merchant', 'scripts/waypoints/travel/main'],function (require, utils, drawer, priest, warrior, ranger, rougue, mage, merchant, travel_main) {
+define(["require", "scripts/utils", "scripts/graph", "ui/draw", 'scripts/classes/priest', 'scripts/classes/warrior', 'scripts/classes/ranger', 'scripts/classes/rougue', 'scripts/classes/mage', 'scripts/classes/merchant', 'scripts/waypoints/travel/main'],function (require, utils, graph, drawer, priest, warrior, ranger, rougue, mage, merchant, travel_main) {
 
 	var pclass = null;
 	var cur_map = null;
@@ -132,19 +132,23 @@ define(["require", "scripts/utils", "ui/draw", 'scripts/classes/priest', 'script
 					default:
 						cur_map = null;
 				}
+
 				if(cur_map) {
 					pathfind_destination = utils.get_var('pathfind_destination');
 
 					var waypointStart = cur_map.get_waypoint(character.real_x,character.real_y);
 					var waypointDest = cur_map.get_waypoint_by_id(pathfind_destination);
-					var path = cur_map.get_waypoint_path(waypointStart, waypointDest);
+
+					if(waypointStart && waypointDest) {
+						var path = graph.get_waypoint_path(cur_map.get_graph_map(), waypointStart.id, waypointDest.id);
+					}
 
 					console.log(path);
-
-					pathfind_mode = false;
-					utils.set_var('pathfind_mode', false);
-					is_pathfinding = false;
 				}
+
+				pathfind_mode = false;
+				utils.set_var('pathfind_mode', false);
+				is_pathfinding = false;
 			}
 
 			if(pathfind_where_mode && !is_pathfinding) {

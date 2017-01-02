@@ -392,6 +392,10 @@ define(["scripts/utils"],function (utils) {
 		return null;
 	};
 
+	map.get_distance_between = function(waypa_id, waypb_id) {
+		return 1;
+	};
+
 	map.get_waypoint = function(x,y) {
 		for(var wayp in map.waypoints) {
 			if(utils.is_inside(map.waypoints[wayp], x, y)) {
@@ -401,123 +405,22 @@ define(["scripts/utils"],function (utils) {
 		return null;
 	};
 
-	map.get_waypoint_recursive = function(path, count, wayp_cur, wayp_str, wayp_des, last_wayp, last_last_wayp) {
-		if(path.length > 1) {
-			var correctPath = [];
-			var last_path_wayp = null;
-			for(var pathId in path) {
-				var path_wayp = path[pathId];
-				if(last_path_wayp) {
-					var correct = false;
-					for(var transferId in last_path_wayp.transfers) {
-						var transfersLastPath = last_path_wayp.transfers[transferId];
-						if(transfersLastPath.between.indexOf(path_wayp.id) > -1) {
-							correct = true;
-						}
-					}
-					if(correct) {
-						correctPath.push(path_wayp);
-					}
-				} else {
-					correctPath.push(path_wayp);
-					last_path_wayp = path_wayp;
+	map.get_graph_map = function() {
+		var graph_map = {};
+		for(var wayp_id in map.waypoints) {
+			var wayp = map.waypoints[wayp_id];
+			var wayp_map = {};
+			for(var wayp_transfer_id in wayp.transfers) {
+				var transfer = wayp.transfers[wayp_transfer_id];
+				for(var transfer_between_id in transfer.between) {
+					var between = transfer.between[transfer_between_id];
+					wayp_map[between] = map.get_distance_between(wayp.id,between);
 				}
 			}
-
-			path = correctPath;
+			graph_map[wayp.id] = wayp_map;
 		}
-
-		if(!wayp_cur && count == 0) {
-			wayp_cur = wayp_str;
-		} else {
-			count += 1;
-		}
-
-		if(path.indexOf(wayp_cur) > -1) {
-			return null;
-		} else {
-			path.push(wayp_cur);
-		}
-
-		if(count > 10) {
-			return null;
-		} else if(wayp_cur.id == wayp_str.id && count > 0) {
-			return null;
-		} else if(wayp_cur.id == wayp_des.id) {
-			return path;
-		} else if((last_wayp && wayp_cur.id == last_wayp.id) || (last_last_wayp && wayp_cur.id == last_last_wayp.id)) {
-			return null;
-		} else {
-			var possibleWayps = [];
-
-			for(var connectedBet in wayp_cur.transfers) {
-				for(var wayp in map.waypoints) {
-					for(var pathId in wayp_cur.transfers[connectedBet].between) {
-						if(wayp_cur.id != wayp_cur.transfers[connectedBet].between[pathId]) {
-							if((map.waypoints[wayp].id == wayp_cur.transfers[connectedBet].between[pathId]) && (possibleWayps.indexOf(map.waypoints[wayp]) == -1)) {
-								possibleWayps.push(map.waypoints[wayp]);
-							}
-						}
-					}
-				}
-			}
-
-			var successFuturePath = [];
-			for(var possibleWayp in possibleWayps) {
-				if(path.indexOf(possibleWayp) > -1) {
-					continue;
-				}
-				var futurePath = map.get_waypoint_recursive(path, count, possibleWayps[possibleWayp], wayp_str, wayp_des, wayp_cur, last_wayp);
-				if(futurePath) {
-					var lastFutureWayp = futurePath[futurePath.length - 1];
-
-					if(lastFutureWayp.id == wayp_des.id) {
-						successFuturePath.push(futurePath);
-					}
-				}
-			}
-
-			var bestPath = null;
-			for(var successFutureWayp in successFuturePath) {
-				if(!bestPath) {
-					bestPath = successFuturePath[successFutureWayp];
-				} else {
-					if(successFuturePath[successFutureWayp].length < bestPath.length) {
-						bestPath = successFutureWayp;
-					}
-				}
-			}
-
-			if(bestPath) {
-				return bestPath;
-			} else {
-				return null;
-			}
-		}
-	};
-
-	map.get_waypoint_path = function(wayp_str, wayp_des) {
-		if(wayp_str && wayp_des) {
-			if(wayp_str.id == wayp_des.id){
-				return false;
-			} else {
-				var curpath = [];
-				var path = map.get_waypoint_recursive(curpath, 0, null, wayp_str, wayp_des, null, null);
-				if(path) {
-					var lastWayp = path[path.length - 1];
-					if(lastWayp.id == wayp_des.id) {
-						return path;
-					} else {
-						return false;
-					}
-				} else {
-					return null;
-				}
-			}
-		} else {
-			return false;
-		}
-	};
+		return graph_map;
+	}
 
 	return map;
 });
