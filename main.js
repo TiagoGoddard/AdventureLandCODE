@@ -141,9 +141,8 @@ define(["require", "scripts/utils", "scripts/graph", "ui/draw", 'scripts/classes
 
 					if(waypointStart && waypointDest) {
 						var path = graph.get_waypoint_path(cur_map.get_graph_map(), waypointStart.id, waypointDest.id);
+						console.log(path);
 					}
-
-					console.log(path);
 				}
 
 				pathfind_mode = false;

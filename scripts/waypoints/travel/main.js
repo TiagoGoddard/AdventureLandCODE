@@ -198,20 +198,20 @@ define(["scripts/utils"],function (utils) {
 		transfers: [],
 		npcs: [],
 		top_left: {
-			real_x: 803,
-			real_y: 151
+			real_x: 952,
+			real_y: 477
 		},
 		top_right: {
 			real_x: 1389,
-			real_y: 151
+			real_y: 477
 		},
 		bottom_left: {
-			real_x: 803,
-			real_y: 477
+			real_x: 952,
+			real_y: 925
 		},
 		bottom_right: {
 			real_x: 1389,
-			real_y: 477
+			real_y: 925
 		}
 	};
 
