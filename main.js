@@ -155,14 +155,14 @@ define(["require", "scripts/utils", "scripts/graph", "ui/draw", 'scripts/classes
 							var c_wayp = future_path;
 							future_path = cur_map.get_waypoint_by_id(path.shift());
 
-							if(future_path.id != waypointStart.id) {
+							if(c_wayp && future_path.id != waypointStart.id) {
 								var d_transfer = utils.get_desired_transfers(c_wayp.id, future_path.id, c_wayp.transfers);
 								var points = d_transfer.points;
 								var cx = character.real_x;
 								var cy = character.real_y;
 								points.sort(function(a, b) {
-									var distance_a = get_distance(cx, cy, a.real_x, a.real_y);
-									var distance_b = get_distance(cx, cy, b.real_x, b.real_y);
+									var distance_a = utils.get_distance(cx, cy, a.real_x, a.real_y);
+									var distance_b = utils.get_distance(cx, cy, b.real_x, b.real_y);
 
 									if(distance_a<distance_b) {
 										return 1
