@@ -145,6 +145,7 @@ define(["require", "scripts/utils", "scripts/graph", "ui/draw", 'scripts/classes
 						var path = graph.find_shortest_path(cur_map.get_graph_map(), waypointStart.id, waypointDest.id);
 						var c_wayp = null;
 						var future_path = null;
+
 						do {
 							pathfind_mode = utils.get_bool_var('pathfind_mode');
 							if(!pathfind_mode) {
@@ -192,12 +193,13 @@ define(["require", "scripts/utils", "scripts/graph", "ui/draw", 'scripts/classes
 										}
 									}
 								}
+
+								set_message('You are in: '+ c_wayp.id);
 							}
 
-							set_message('You are in: '+ c_wayp.id);
 						} while(path.length > 0);
 
-						set_message('Arrived: '+ waypointDest.id);
+						set_message('Arrived');
 					}
 				}
 
