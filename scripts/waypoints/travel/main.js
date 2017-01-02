@@ -408,7 +408,14 @@ define(["scripts/utils"],function (utils) {
 			for(var pathId in path) {
 				var path_wayp = path[pathId];
 				if(last_path_wayp) {
-					if(last_path_wayp.between.indexOf(path_wayp.id) > -1) {
+					var correct = false;
+					for(var transferId in last_path_wayp.transfers) {
+						var transfersLastPath = last_path_wayp.transfers[transferId];
+						if(transfersLastPath.between.indexOf(path_wayp.id) > -1) {
+							correct = true;
+						}
+					}
+					if(correct) {
 						correctPath.push(path_wayp);
 					}
 				} else {
