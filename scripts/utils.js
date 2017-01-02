@@ -96,7 +96,8 @@ define(function () {
   			return parent.G.items[item.name];
 		},
 		get_desired_transfers: function(cid, did, transfers) {
-			for(var transfer in transfers) {
+			for(var transfer_id in transfers) {
+				var transfer = transfers[transfer_id];
 				if((transfer.between.indexOf(cid) > -1) && (transfer.between.indexOf(did) > -1)) {
 					return transfer;
 				}
