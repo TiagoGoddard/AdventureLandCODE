@@ -140,6 +140,8 @@ define(["require", "scripts/utils", "scripts/graph", "ui/draw", 'scripts/classes
 					var waypointDest = cur_map.get_waypoint_by_id(pathfind_destination);
 
 					if(waypointStart && waypointDest) {
+						set_message("Pathfinding to": waypointDest.id);
+
 						var path = graph.find_shortest_path(cur_map.get_graph_map(), waypointStart.id, waypointDest.id);
 						var c_wayp = null;
 						var future_path = null;
@@ -191,7 +193,11 @@ define(["require", "scripts/utils", "scripts/graph", "ui/draw", 'scripts/classes
 									}
 								}
 							}
+
+							set_message('You are in: '+ c_wayp.id);
 						} while(path.length > 0);
+
+						set_message('Arrived: '+ waypointDest.id);
 					}
 				}
 
@@ -214,7 +220,7 @@ define(["require", "scripts/utils", "scripts/graph", "ui/draw", 'scripts/classes
 				if(cur_map) {
 					var cur_wayp = cur_map.get_waypoint(character.real_x,character.real_y);
 					if(cur_wayp) {
-						game_log('You are in:'+cur_wayp.id, '#0000FF');
+						game_log('You are in: '+cur_wayp.id, '#0000FF');
 					}
 				}
 
