@@ -95,6 +95,31 @@ define(function () {
 		get_item_info: function(item) {
   			return parent.G.items[item.name];
 		},
+		get_desired_transfers: function(cid, did, transfers) {
+			for(var transfer in transfers) {
+				if((transfer.between.indexOf(cid) > -1) && (transfer.between.indexOf(did) > -1)) {
+					return transfer;
+				}
+			}
+			return null;
+		},
+		get_nearest_point: function(x, y, points) {
+			var min_point = null;
+			var min_distance = 9999999;
+
+			for(var point in points) {
+				var distance = Math.sqrt((x - point.real_x) * (x - point.real_x) + (y - point.real_y) * (y - point.real_y));
+				if(distance <= min_distance) {
+					min_point = point;
+					min_distance = distance;
+				}
+			}
+
+			return min_point;
+		},
+		get_distance: function(x, y, x2, y2) {
+			return Math.sqrt((x - x2) * (x - x2) + (y - y2) * (y - y2));
+		},
 
 		set_var: function(desired, value) {
 			var retrievedObject = JSON.parse(localStorage.getItem('storageVars_'+character.name));

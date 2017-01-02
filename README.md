@@ -4,7 +4,7 @@ My complete AdventureLandCODE
 
 ## Inside Game CODE Javascript:
 ```javascript
-var version = '1.0.9';
+var version = '1.1.0';
 
 // Handle party
 var party_leader = 'Washer';
@@ -113,6 +113,11 @@ function handle_command(command, args){
 			retrievedObject.attack_mode = !retrievedObject.attack_mode;
 			break;
 		case "goto":
+			if(retrievedObject.anchor_mode) {
+				retrievedObject.anchor_mode = false;
+				game_log('Un-Anchoring', '#0000FF');
+			}
+
 			if(retrievedObject.pathfind_mode) {
 				retrievedObject.pathfind_mode = !retrievedObject.pathfind_mode;
 				game_log('Stoping pathfind', '#0000FF');

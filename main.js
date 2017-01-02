@@ -141,7 +141,57 @@ define(["require", "scripts/utils", "scripts/graph", "ui/draw", 'scripts/classes
 
 					if(waypointStart && waypointDest) {
 						var path = graph.find_shortest_path(cur_map.get_graph_map(), waypointStart.id, waypointDest.id);
-						console.log(path);
+						var c_wayp = null;
+						var future_path = null;
+						do {
+							pathfind_mode = utils.get_bool_var('pathfind_mode');
+							if(!pathfind_mode) {
+								break;
+							}
+
+							var c_wayp = future_path;
+							future_path = path.shift();
+
+							if(future_path.id != waypointStart.id) {
+								var d_transfer = utils.get_desired_transfers(c_wayp.id, future_path.id, c_wayp.transfers);
+								var points = d_transfer.points;
+								var cx = character.real_x;
+								var cy = character.real_y;
+								points.sort(function(a, b) {
+									var distance_a = get_distance(cx, cy, a.real_x, a.real_y);
+									var distance_b = get_distance(cx, cy, b.real_x, b.real_y);
+
+									if(distance_a<distance_b) {
+										return 1
+									} else if(distance_a>distance_b) {
+										return - 1;
+									} else {
+										return 0;
+									}
+								});
+
+								for(var point_id in points) {
+									pathfind_mode = utils.get_bool_var('pathfind_mode');
+									if(!pathfind_mode) {
+										break;
+									}
+
+									var point = points[point_id];
+
+									move(
+										point.real_x,
+										point.real_y
+									);
+
+									while(character.moving) {
+										pathfind_mode = utils.get_bool_var('pathfind_mode');
+										if(!pathfind_mode) {
+											break;
+										}
+									}
+								}
+							}
+						} while(path.length > 0);
 					}
 				}
 
