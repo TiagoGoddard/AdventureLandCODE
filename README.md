@@ -111,11 +111,20 @@ function handle_command(command, args){
 			break;
 		case "attack":
 			retrievedObject.attack_mode = !retrievedObject.attack_mode;
+			if(retrievedObject.attack_mode) {
+				game_log('Start attacking', '#0000FF');
+			} else {
+				game_log('Stopping attacks', '#0000FF');
+			}
 			break;
 		case "goto":
 			if(retrievedObject.anchor_mode) {
 				retrievedObject.anchor_mode = false;
 				game_log('Un-Anchoring', '#0000FF');
+			}
+			if(retrievedObject.attack_mode) {
+				retrievedObject.attack_mode = false;
+				game_log('Stopping Attacks', '#0000FF');
 			}
 
 			if(retrievedObject.pathfind_mode) {
