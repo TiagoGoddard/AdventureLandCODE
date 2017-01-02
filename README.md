@@ -206,9 +206,6 @@ $.getScript('https://cdn.rawgit.com/TiagoGoddard/AdventureLandCODE/v'+version+'/
 	requirejs.config({
 		baseUrl: 'https://cdn.rawgit.com/TiagoGoddard/AdventureLandCODE/v'+version+'/',
 		paths: {
-			upgrade: 'scripts/upgrade',
-			utils: 'scripts/utils',
-			draw: 'ui/draw',
 			classes: 'scripts/classes',
 			waypoints: 'scripts/waypoints'
 		}
@@ -216,6 +213,7 @@ $.getScript('https://cdn.rawgit.com/TiagoGoddard/AdventureLandCODE/v'+version+'/
 
 	requirejs(['main']);
 	requirejs(['upgrades']);
+	requirejs(['pathfind']);
 });
 
 window.aldc_apikey = 'API_KEY';

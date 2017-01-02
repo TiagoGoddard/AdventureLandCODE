@@ -1,4 +1,4 @@
-define(["require", "scripts/utils", "scripts/graph", "ui/draw", 'scripts/classes/priest', 'scripts/classes/warrior', 'scripts/classes/ranger', 'scripts/classes/rougue', 'scripts/classes/mage', 'scripts/classes/merchant', 'scripts/waypoints/travel/main'],function (require, utils, graph, drawer, priest, warrior, ranger, rougue, mage, merchant, travel_main) {
+define(["require", "scripts/utils", "ui/draw", 'scripts/classes/priest', 'scripts/classes/warrior', 'scripts/classes/ranger', 'scripts/classes/rougue', 'scripts/classes/mage', 'scripts/classes/merchant'],function (require, utils, drawer, priest, warrior, ranger, rougue, mage, merchant) {
 
 	var pclass = null;
 	var cur_map = null;
@@ -49,18 +49,12 @@ define(["require", "scripts/utils", "scripts/graph", "ui/draw", 'scripts/classes
 		var pots_minimum = utils.get_int_var('pots_minimum');
 		var pots_to_buy = utils.get_int_var('pots_to_buy');
 
-		var pathfind_mode = utils.get_bool_var('pathfind_mode');
-		var pathfind_where_mode = utils.get_bool_var('pathfind_where_mode');
-		var pathfind_destination = utils.get_var('pathfind_destination');
-
 		var turn = 0;
 		var last_turn = 0;
 		var last_attack = 0;
 		var last_skill = null;
 		var last_tank_skill = null;
 		var last_target = null;
-
-		var is_pathfinding = false;
 
 		var last_x = 0;
 		var last_y = 0;
@@ -122,115 +116,6 @@ define(["require", "scripts/utils", "scripts/graph", "ui/draw", 'scripts/classes
 			//TODO Gold Boosters
 			loot();
 
-			if(pathfind_mode && !is_pathfinding) {
-				is_pathfinding = true;
-
-				switch(parent.current_map) {
-					case 'main':
-						cur_map = travel_main;
-						break;
-					default:
-						cur_map = null;
-				}
-
-				if(cur_map) {
-					pathfind_destination = utils.get_var('pathfind_destination');
-
-					var waypointStart = cur_map.get_waypoint(character.real_x,character.real_y);
-					var waypointDest = cur_map.get_waypoint_by_id(pathfind_destination);
-
-					if(waypointStart && waypointDest) {
-						set_message("Pathfinding to: "+waypointDest.id);
-
-						var path = graph.find_shortest_path(cur_map.get_graph_map(), waypointStart.id, waypointDest.id);
-						var c_wayp = null;
-						var future_path = null;
-
-						do {
-							pathfind_mode = utils.get_bool_var('pathfind_mode');
-							if(!pathfind_mode) {
-								break;
-							}
-
-							var c_wayp = future_path;
-							future_path = cur_map.get_waypoint_by_id(path.shift());
-
-							if(c_wayp && future_path.id != waypointStart.id) {
-								var d_transfer = utils.get_desired_transfers(c_wayp.id, future_path.id, c_wayp.transfers);
-								var points = d_transfer.points;
-								var cx = character.real_x;
-								var cy = character.real_y;
-								points.sort(function(a, b) {
-									var distance_a = utils.get_distance(cx, cy, a.real_x, a.real_y);
-									var distance_b = utils.get_distance(cx, cy, b.real_x, b.real_y);
-
-									if(distance_a<distance_b) {
-										return 1
-									} else if(distance_a>distance_b) {
-										return - 1;
-									} else {
-										return 0;
-									}
-								});
-
-								for(var point_id in points) {
-									pathfind_mode = utils.get_bool_var('pathfind_mode');
-									if(!pathfind_mode) {
-										break;
-									}
-
-									var point = points[point_id];
-
-									move(
-										point.real_x,
-										point.real_y
-									);
-
-									while(character.moving) {
-										pathfind_mode = utils.get_bool_var('pathfind_mode');
-										if(!pathfind_mode) {
-											break;
-										}
-									}
-								}
-
-								set_message('You are in: '+ c_wayp.id);
-							}
-
-						} while(path.length > 0);
-
-						set_message('Arrived');
-					}
-				}
-
-				pathfind_mode = false;
-				utils.set_var('pathfind_mode', false);
-				is_pathfinding = false;
-			}
-
-			if(pathfind_where_mode && !is_pathfinding) {
-				is_pathfinding = true;
-
-				switch(parent.current_map) {
-					case 'main':
-						cur_map = travel_main;
-						break;
-					default:
-						cur_map = null;
-				}
-
-				if(cur_map) {
-					var cur_wayp = cur_map.get_waypoint(character.real_x,character.real_y);
-					if(cur_wayp) {
-						game_log('You are in: '+cur_wayp.id, '#0000FF');
-					}
-				}
-
-				pathfind_where_mode = false;
-				utils.set_var('pathfind_where_mode', false);
-				is_pathfinding = false;
-			}
-
 			if(!pclass.has_attack()) {
 				//Merchant can't attack, so shouldn't really try
 
@@ -266,7 +151,7 @@ define(["require", "scripts/utils", "scripts/graph", "ui/draw", 'scripts/classes
 				}
 			}
 
-			if(!attack_mode || character.moving || pathfind_mode) return;
+			if(!attack_mode || character.moving) return;
 
 			if(anchor_mode && character.name == party_leader && utils.is_away_from(anchor_x, anchor_y, anchor_distance_x, anchor_distance_y)) {
 				move(anchor_x, anchor_y);
