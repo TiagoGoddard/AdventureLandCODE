@@ -186,8 +186,7 @@ var starter_vars = {
     'anchor_distance_y': 300,
 
 	'pathfind_mode': false,
-    'pathfind_where_mode': false,
-	'pathfind_destination': 'town',
+	'pathfind_destination': null,
 
 	'near_distance': 60,
 	'near_distance_negative': -60,
@@ -206,8 +205,7 @@ $.getScript('https://cdn.rawgit.com/TiagoGoddard/AdventureLandCODE/v'+version+'/
 	requirejs.config({
 		baseUrl: 'https://cdn.rawgit.com/TiagoGoddard/AdventureLandCODE/v'+version+'/',
 		paths: {
-			classes: 'scripts/classes',
-			waypoints: 'scripts/waypoints'
+			classes: 'scripts/classes'
 		}
 	});
 
@@ -230,11 +228,9 @@ window.aldc_use_exchange = true;
 $.getScript('http://adventurecode.club/script?t='+(new Date).getTime(), function() {
     game_log('Thank you for contributing your drop data!', '#FFFF00');
 });
-
-
 ```
 
-## PositionFinder Game CODE Javascript:
+## Merchant Game CODE Javascript:
 ```javascript
 //TODO AutoBuy and Sell itens for set price
 var party_leader = 'Washer';

@@ -68,8 +68,6 @@ define(["require", "scripts/utils", "ui/draw", 'scripts/classes/priest', 'script
 			anchor_y = utils.get_int_var('anchor_y');
 
 			attack_mode = utils.get_bool_var('attack_mode');
-			pathfind_mode = utils.get_bool_var('pathfind_mode');
-			pathfind_where_mode = utils.get_bool_var('pathfind_where_mode');
 
 			if (turn >= 60) {
 				turn = 0;
