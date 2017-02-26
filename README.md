@@ -4,7 +4,7 @@ My complete AdventureLandCODE
 
 ## Inside Game CODE Javascript:
 ```javascript
-var version = '1.1.0';
+var version = '1.2.2';
 
 // Handle party
 var party_leader = 'Washer';
@@ -28,7 +28,6 @@ if(character.name == party_leader) {
 	}, 10000);
 }
 
-
 function on_party_invite(name) {
 	if(!character.party && (party_members.indexOf(name) !== -1)) {
 		accept_party_invite(name);
@@ -46,6 +45,14 @@ function on_combined_damage() {
 	var random_x = Math.random() * (120) - 60;
 	var random_y = Math.random() * (120) - 60;
 	move(character.real_x+random_x,character.real_y+random_y);
+}
+
+function on_cm(name,data) {
+	if(character.party && (party_members.indexOf(name) !== -1)) {
+		if(data.going_to) {
+			handle_command('gotosolo', data.going_to);
+		}
+	}
 }
 
 //Handle disconnect
@@ -117,6 +124,33 @@ function handle_command(command, args){
 				game_log('Stopping attacks', '#0000FF');
 			}
 			break;
+		case "gotosolo":
+			if(retrievedObject.anchor_mode) {
+				retrievedObject.anchor_mode = false;
+				game_log('Un-Anchoring', '#0000FF');
+			}
+			if(retrievedObject.attack_mode) {
+				retrievedObject.attack_mode = false;
+				game_log('Stopping Attacks', '#0000FF');
+			}
+
+			if(retrievedObject.pathfind_mode) {
+				retrievedObject.pathfind_mode = !retrievedObject.pathfind_mode;
+				retrievedObject.hunting_monster = null;
+
+				game_log('Stoping pathfind', '#0000FF');
+			} else if(args.length > 0 && args.length <= 1) {
+				retrievedObject.pathfind_destination = args[0];
+				retrievedObject.pathfind_mode = !retrievedObject.pathfind_mode;
+
+				if(G.monsters[retrievedObject.pathfind_destination]) {
+					retrievedObject.hunting_monster = 'retrievedObject.pathfind_destination';
+				}
+
+				game_log('Starting pathfind', '#0000FF');
+			}
+
+			break;
 		case "goto":
 			if(retrievedObject.anchor_mode) {
 				retrievedObject.anchor_mode = false;
@@ -129,10 +163,21 @@ function handle_command(command, args){
 
 			if(retrievedObject.pathfind_mode) {
 				retrievedObject.pathfind_mode = !retrievedObject.pathfind_mode;
+				retrievedObject.hunting_monster = null;
+
 				game_log('Stoping pathfind', '#0000FF');
 			} else if(args.length > 0 && args.length <= 1) {
 				retrievedObject.pathfind_destination = args[0];
 				retrievedObject.pathfind_mode = !retrievedObject.pathfind_mode;
+
+				if(G.monsters[retrievedObject.pathfind_destination]) {
+					retrievedObject.hunting_monster = 'retrievedObject.pathfind_destination';
+				}
+
+				send_cm(party_members, {
+					going_to: retrievedObject.pathfind_destination
+				});
+
 				game_log('Starting pathfind', '#0000FF');
 			}
 			break;
@@ -172,18 +217,18 @@ var starter_vars = {
 	'min_upg_gold': 1000000,
 
 	'swhitelist': [],
-	'ewhitelist': ['gem0','armorbox','weaponbox','candycane','mistletoe','ornament','armorbox','weaponbox','jewellerybox','candy1','candy0'],
+	'ewhitelist': ['gem0','gem1','armorbox','weaponbox','candycane','mistletoe','ornament','armorbox','weaponbox','jewellerybox','candy1','candy0','seashell'],
 	'uwhitelist': ['quiver','xmaspants', 'xmasshoes', 'xmassweater', 'xmashat', 'mittens'],
 	'cwhitelist': ['wbook0', 'intamulet', 'stramulet', 'dexamulet', 'intearring', 'strearring', 'dexearring', 'hpbelt', 'hpamulet', 'ringsj', 'amuletofm', 'orbofstr', 'orbofint', 'orbofres', 'orbofhp', 'orbofsc'],
 
 	'allow_exchanging': true,
 	'allow_selling': true,
 
-    'anchor_mode': true,
-    'anchor_x': 1220,
-    'anchor_y': 678,
-    'anchor_distance_x': 150,
-    'anchor_distance_y': 300,
+	'anchor_mode': false,
+	'anchor_x': 0,
+	'anchor_y': 0,
+	'anchor_distance_x': 300,
+	'anchor_distance_y': 300,
 
 	'pathfind_mode': false,
 	'pathfind_destination': null,
@@ -193,9 +238,10 @@ var starter_vars = {
 
 	'party_leader': party_leader,
 
-    'attack_mode': true,
-    'min_xp': 950,
-    'max_att': 120
+	'attack_mode': true,
+	'hunting_monster': null,
+	//'min_xp': 950,
+	//'max_att': 120
 };
 
 // Put the config into storage

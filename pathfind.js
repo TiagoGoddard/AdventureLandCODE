@@ -28,7 +28,7 @@ define(["require", "scripts/utils"],function (require, utils) {
 			pathfind_destination = utils.get_var('pathfind_destination');
 
 			smart_move({to:pathfind_destination},function(r){
-
+				utils.set_var('attack_mode', true);
 			});
 		}
 

@@ -38,8 +38,7 @@ define(["require", "scripts/utils", "ui/draw", 'scripts/classes/priest', 'script
 		var near_distance = utils.get_int_var('near_distance');
 		var near_distance_negative = utils.get_int_var('near_distance_negative');
 
-		var min_xp = utils.get_int_var('min_xp');
-		var max_att = utils.get_int_var('max_att');
+		var hunting_monster = utils.get_var('hunting_monster');
 
 		var allow_potions_purchase = utils.get_bool_var('allow_potions_purchase');
 		var buy_hp = utils.get_bool_var('buy_hp');
@@ -78,8 +77,7 @@ define(["require", "scripts/utils", "ui/draw", 'scripts/classes/priest', 'script
 				near_distance = utils.get_int_var('near_distance');
 				near_distance_negative = utils.get_int_var('near_distance_negative');
 
-				min_xp = utils.get_int_var('min_xp');
-				max_att = utils.get_int_var('max_att');
+				hunting_monster = utils.get_var('hunting_monster');
 
 				//Check for potions
 				if(allow_potions_purchase) {
@@ -157,6 +155,7 @@ define(["require", "scripts/utils", "ui/draw", 'scripts/classes/priest', 'script
 
 			var target=get_targeted_monster();
 			var targeted=utils.get_monsters_targeted(character);
+
 			if(target && last_attack > 20) {
 				last_attack = 0;
 				target = null;
@@ -175,6 +174,7 @@ define(["require", "scripts/utils", "ui/draw", 'scripts/classes/priest', 'script
 
 					if(targetParty) break;
 				}
+
 				if(!targetParty) {
 					var targetMe = false;
 					for(id in targeted) {
@@ -187,8 +187,14 @@ define(["require", "scripts/utils", "ui/draw", 'scripts/classes/priest', 'script
 						if(monstersTargetedParty.length > 0) {
 							targetedParty = monstersTargetedParty[0];
 						}
+
 						if(!targetedParty) {
-							target=get_nearest_monster({'min_xp':min_xp,'max_att':max_att,'no_target':true});
+							if(hunting_monster) {
+								target=get_nearest_monster({'type':hunting_monster,'no_target':true});
+							} else {
+								target=get_nearest_monster({'no_target':true,'max_att':(character.hp/2)});
+							}
+
 							if(target) {
 								change_target(target);
 							} else {

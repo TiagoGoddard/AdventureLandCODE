@@ -31,36 +31,38 @@ define(["require", "scripts/utils"],function (require, utils) {
 			cwhitelist = utils.get_var('cwhitelist');
 		}
 
-		if (character.gold > min_upg_gold) {
-			for (let i = 0; i < character.items.length; i++) {
-				let c = character.items[i];
-				if (c) {
-					if (uwhitelist.includes(c.name)) {
+		for (let i = 0; i < character.items.length; i++) {
+			let c = character.items[i];
+			if (c) {
+				if (uwhitelist.includes(c.name)) {
+					if (character.gold > min_upg_gold) {
 						//Upgrade
 						parent.upgradeit(c.name, max_upgrade_level, { buy_item: allow_item_purchase, buy_scrolls: true, stop_on_success: stop_on_success });
-					} else if (cwhitelist.includes(c.name) && c.level < max_compound_level) {
+					}
+				} else if (cwhitelist.includes(c.name) && c.level < max_compound_level) {
+					if (character.gold > min_upg_gold) {
 						//Compound
 						let [item2_slot, item2] = utils.get_item_slot((item) => c.name === item.name && c.level === item.level, i + 1);
 						let [item3_slot, item3] = utils.get_item_slot((item) => c.name === item.name && c.level === item.level, item2_slot + 1);
 						if (item2 && item3) {
 							parent.compoundit(c.name, c.level);
 						}
-					} else if (c && ewhitelist.includes(c.name)) {
-						let baseitem = parent.G.items[c.name];
-						if(baseitem && baseitem.e && c.q >= baseitem.e) {
-							//Exchange
-							let [item_slot, item] = utils.get_item_slot(i => i.name == c.name);
-							parent.exchangeit(item_slot);
-						}
-					} else if (c && swhitelist.includes(c.name)) {
-						//Sell
-						sell(i);
 					}
+				} else if (c && ewhitelist.includes(c.name)) {
+					let baseitem = parent.G.items[c.name];
+					if(baseitem && baseitem.e && c.q >= baseitem.e) {
+						//Exchange
+						let [item_slot, item] = utils.get_item_slot(i => i.name == c.name);
+						parent.exchangeit(item_slot);
+					}
+				} else if (c && swhitelist.includes(c.name)) {
+					//Sell
+					sell(i);
 				}
 			}
 		}
 
-	}, 1000);
+	}, 5000);
 
 	var quit = false;
 	var global_runner = false;
