@@ -4,7 +4,7 @@ My complete AdventureLandCODE
 
 ## Inside Game CODE Javascript:
 ```javascript
-var version = '1.3.0';
+var version = '1.3.1';
 
 // Handle party
 var party_leader = 'Washer';
@@ -206,6 +206,7 @@ var starter_vars = {
 	'quited_upgrade_runner': false,
 
 	'allow_potions_purchase': true,
+	'is_buying': false,
 	'buy_hp': true,
 	'buy_mp': true,
 	'pots_minimum': 50,

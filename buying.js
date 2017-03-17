@@ -3,6 +3,8 @@ define(["require", "scripts/utils"],function (require, utils) {
 	var pclass = utils.get_class(character.ctype);
 
 	var allow_potions_purchase = utils.get_bool_var('allow_potions_purchase');
+	var allow_potions_purchase = utils.get_bool_var('allow_potions_purchase');
+
 	var buy_hp = utils.get_bool_var('buy_hp');
 	var buy_mp = utils.get_bool_var('buy_mp');
 
@@ -19,9 +21,10 @@ define(["require", "scripts/utils"],function (require, utils) {
 		}
 
 		allow_potions_purchase = utils.get_bool_var('allow_potions_purchase');
+		is_buying = utils.get_bool_var('is_buying');
 
 		//Check for potions
-		if(allow_potions_purchase) {
+		if(allow_potions_purchase && !is_buying) {
 			let [hpslot, hppot] = utils.get_item(i => i.name == pclass.get_hp_potion());
 			let [mpslot, mppot] = utils.get_item(i => i.name == pclass.get_mp_potion());
 
@@ -30,6 +33,8 @@ define(["require", "scripts/utils"],function (require, utils) {
 
 			if (should_buy_hp || should_buy_mp) {
 				var pathfind_destination = 'potions';
+				utils.set_var('is_buying', true);
+				game_log('Buying Potions', '#0000FF');
 
 				utils.set_var('attack_mode', false);
 				game_log('Stopping Attacks', '#0000FF');
@@ -38,19 +43,22 @@ define(["require", "scripts/utils"],function (require, utils) {
 					utils.set_var('attack_mode', true);
 					game_log('Enable Attacks', '#0000FF');
 
-					if(should_buy_hp) {
-						parent.buy(pclass.get_hp_potion(), pots_to_buy);
+					if(should_buy_mp) {
+						parent.buy(pclass.get_mp_potion(), pots_to_buy);
+						set_message("Buying MP pots, slot: "+mpslot);
 					}
 					if(should_buy_hp) {
 						parent.buy(pclass.get_hp_potion(), pots_to_buy);
+						set_message("Buying HP pots, slot: "+hpslot);
 					}
-					set_message("Buying HP pots, slot: "+hpslot);
+
+					utils.set_var('is_buying', false);
+					game_log('Potions Bought', '#0000FF');
 				});
 
 			}
+
 			if (buy_mp && (!mppot || mppot.q < pots_minimum)) {
-				parent.buy(pclass.get_mp_potion(), pots_to_buy);
-				set_message("Buying MP pots, slot: "+mpslot);
 			}
 		}
 
