@@ -1,7 +1,5 @@
 define(["require", "scripts/utils"],function (require, utils) {
 
-	var cur_map = null;
-
 	var pathfind_mode = utils.get_bool_var('pathfind_mode');
 	var pathfind_destination = utils.get_var('pathfind_destination');
 
@@ -18,6 +16,10 @@ define(["require", "scripts/utils"],function (require, utils) {
 
 	var mainInterval = setInterval(function(){
 		turn += 1;
+
+		if (turn >= 60) {
+			turn = 0;
+		}
 
 		pathfind_mode = utils.get_bool_var('pathfind_mode');
 

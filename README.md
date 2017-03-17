@@ -4,7 +4,7 @@ My complete AdventureLandCODE
 
 ## Inside Game CODE Javascript:
 ```javascript
-var version = '1.2.2';
+var version = '1.3.0';
 
 // Handle party
 var party_leader = 'Washer';
@@ -48,7 +48,7 @@ function on_combined_damage() {
 }
 
 function on_cm(name,data) {
-	if(character.party && (party_members.indexOf(name) !== -1)) {
+	if(character.party && (party_members.indexOf(name) > -1)) {
 		if(data.going_to) {
 			handle_command('gotosolo', data.going_to);
 		}
@@ -57,9 +57,10 @@ function on_cm(name,data) {
 
 //Handle disconnect
 setInterval(function () {
-var disconnect = $(".gamebutton.clickable").html();
-	if(disconnect = 'DISCONNECT') {
-		location.reload();
+	var disconnect = $(".gamebutton.clickable").html();
+
+	if(disconnect && disconnect == 'DISCONNECT') {
+		parent.location.reload();
 		//Use this to login:
 		//log_in(starter_vars.character,starter_vars.login,starter_vars.password);
 	}
@@ -72,6 +73,8 @@ function handle_death() {
 			clearInterval(respawnInterval);
 		}
 	},15000);
+
+	return true;
 }
 
 // Config commands
@@ -205,10 +208,8 @@ var starter_vars = {
 	'allow_potions_purchase': true,
 	'buy_hp': true,
 	'buy_mp': true,
-	'hp_potion': 'hpot1',
-	'mp_potion': 'mpot1',
 	'pots_minimum': 50,
-	'pots_to_buy': 1000,
+	'pots_to_buy': 500,
 
 	'allow_item_purchase': true,
 	'stop_on_success': true,
@@ -219,7 +220,7 @@ var starter_vars = {
 	'swhitelist': [],
 	'ewhitelist': ['gem0','gem1','armorbox','weaponbox','candycane','mistletoe','ornament','armorbox','weaponbox','jewellerybox','candy1','candy0','seashell'],
 	'uwhitelist': ['quiver','xmaspants', 'xmasshoes', 'xmassweater', 'xmashat', 'mittens'],
-	'cwhitelist': ['wbook0', 'intamulet', 'stramulet', 'dexamulet', 'intearring', 'strearring', 'dexearring', 'hpbelt', 'hpamulet', 'ringsj', 'amuletofm', 'orbofstr', 'orbofint', 'orbofres', 'orbofhp', 'orbofsc'],
+	'cwhitelist': ['wbook0', 'intamulet', 'stramulet', 'dexamulet', 'intearring', 'strearring', 'dexearring', 'hpbelt', 'hpamulet', 'ringsj', 'vitearring', 'amuletofm', 'orbofstr', 'orbofint', 'orbofres', 'orbofhp', 'orbofsc'],
 
 	'allow_exchanging': true,
 	'allow_selling': true,
@@ -239,9 +240,7 @@ var starter_vars = {
 	'party_leader': party_leader,
 
 	'attack_mode': true,
-	'hunting_monster': null,
-	//'min_xp': 950,
-	//'max_att': 120
+	'hunting_monster': null
 };
 
 // Put the config into storage
@@ -258,6 +257,7 @@ $.getScript('https://cdn.rawgit.com/TiagoGoddard/AdventureLandCODE/v'+version+'/
 	requirejs(['main']);
 	requirejs(['upgrades']);
 	requirejs(['pathfind']);
+	requirejs(['buying']);
 });
 
 window.aldc_apikey = 'API_KEY';
@@ -301,7 +301,7 @@ localStorage.setItem('storageVars_'+character.name, JSON.stringify(starter_vars)
 setInterval(function () {
 var disconnect = $(".gamebutton.clickable").html();
 	if(disconnect = 'DISCONNECT') {
-		location.reload();
+		//location.reload();
 		//Use this to login:
 		//log_in(starter_vars.character,starter_vars.login,starter_vars.password);
 	}

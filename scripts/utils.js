@@ -1,5 +1,22 @@
-define(function () {
+define(['scripts/classes/priest', 'scripts/classes/warrior', 'scripts/classes/ranger', 'scripts/classes/rougue', 'scripts/classes/mage', 'scripts/classes/merchant'],function (priest, warrior, ranger, rougue, mage, merchant) {
 	return {
+		get_class: function(ctype) {
+			switch(ctype) {
+				case 'priest':
+					return priest;
+				case 'warrior':
+					return warrior;
+				case 'ranger':
+					return ranger;
+				case 'mage':
+					return mage;
+				case 'rougue':
+					return rougue;
+				case 'merchant':
+					return merchant;
+			}
+			return null;
+		},
 		get_var: function(desired) {
 			return JSON.parse(localStorage.getItem('storageVars_'+character.name))[desired];
 		},
@@ -95,32 +112,6 @@ define(function () {
 		get_item_info: function(item) {
   			return parent.G.items[item.name];
 		},
-		get_desired_transfers: function(cid, did, transfers) {
-			for(var transfer_id in transfers) {
-				var transfer = transfers[transfer_id];
-				if((transfer.between.indexOf(cid) > -1) && (transfer.between.indexOf(did) > -1)) {
-					return transfer;
-				}
-			}
-			return null;
-		},
-		get_nearest_point: function(x, y, points) {
-			var min_point = null;
-			var min_distance = 9999999;
-
-			for(var point in points) {
-				var distance = Math.sqrt((x - point.real_x) * (x - point.real_x) + (y - point.real_y) * (y - point.real_y));
-				if(distance <= min_distance) {
-					min_point = point;
-					min_distance = distance;
-				}
-			}
-
-			return min_point;
-		},
-		get_distance: function(x, y, x2, y2) {
-			return Math.sqrt((x - x2) * (x - x2) + (y - y2) * (y - y2));
-		},
 
 		set_var: function(desired, value) {
 			var retrievedObject = JSON.parse(localStorage.getItem('storageVars_'+character.name));
@@ -167,12 +158,6 @@ define(function () {
 		},
 		is_missing_mp: function(entity, percentage) {
 			return (entity.mp  / entity.max_mp) < percentage;
-		},
-		is_inside: function(waypoint,x,y) {
-			return  	waypoint.top_left.real_x <= x && waypoint.top_left.real_y <= y
-					&&	waypoint.top_right.real_x >= x && waypoint.top_right.real_y <= y
-					&&	waypoint.bottom_left.real_x <= x && waypoint.bottom_left.real_y >= y
-					&&	waypoint.bottom_right.real_x >= x && waypoint.bottom_right.real_y >= y;
 		},
 
 		do_use_hp: function() {

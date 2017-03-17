@@ -15,6 +15,12 @@ define(["scripts/utils"],function (utils) {
 		has_attack: function() {
 			return true;
 		},
+		get_hp_potion: function() {
+			return 'hpot1';
+		},
+		get_mp_potion: function() {
+			return 'mpot1';
+		},
 		use_skill: function(target, time_since) {
 			//Vanish one invis is off cd (cd is 12sec).
 			if (!time_since || new Date() - time_since > 12000) {

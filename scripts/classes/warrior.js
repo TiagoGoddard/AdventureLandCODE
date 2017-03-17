@@ -15,6 +15,12 @@ define(["scripts/utils"],function (utils) {
 		has_attack: function() {
 			return true;
 		},
+		get_hp_potion: function() {
+			return 'hpot1';
+		},
+		get_mp_potion: function() {
+			return 'mpot0';
+		},
 		use_skill: function(target, time_since) {
 			//Charge only if charge is off of cd (cd is 40sec).
 			if (!time_since || new Date() - time_since > 40000) {

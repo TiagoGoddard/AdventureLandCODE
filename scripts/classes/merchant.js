@@ -15,6 +15,12 @@ define(["scripts/utils"],function (utils) {
 		has_attack: function() {
 			return false;
 		},
+		get_hp_potion: function() {
+			return 'hpot0';
+		},
+		get_mp_potion: function() {
+			return 'mpot0';
+		},
 		use_skill: function(target, time_since) {
 			if (!time_since || new Date() - time_since > 60000) {
 				time_since = new Date();

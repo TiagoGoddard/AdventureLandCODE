@@ -17,7 +17,11 @@ define(["require", "scripts/utils"],function (require, utils) {
 	var mainInterval = setInterval(function() {
 		turn += 1;
 
-		allow_item_purchase = utils.get_bool_var('allow_item_purchase');
+		if (turn >= 60) {
+			turn = 0;
+		}
+
+		/*allow_item_purchase = utils.get_bool_var('allow_item_purchase');
 		stop_on_success = utils.get_bool_var('stop_on_success');
 
 		if (turn >= 20) {
@@ -60,7 +64,7 @@ define(["require", "scripts/utils"],function (require, utils) {
 					sell(i);
 				}
 			}
-		}
+		}*/
 
 	}, 5000);
 

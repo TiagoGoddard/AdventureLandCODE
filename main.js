@@ -1,28 +1,6 @@
-define(["require", "scripts/utils", "ui/draw", 'scripts/classes/priest', 'scripts/classes/warrior', 'scripts/classes/ranger', 'scripts/classes/rougue', 'scripts/classes/mage', 'scripts/classes/merchant'],function (require, utils, drawer, priest, warrior, ranger, rougue, mage, merchant) {
+define(["require", "scripts/utils", "ui/draw"],function (require, utils, drawer) {
 
-	var pclass = null;
-	var cur_map = null;
-
-	switch(character.ctype) {
-		case 'priest':
-			pclass = priest;
-			break;
-		case 'warrior':
-			pclass = warrior;
-			break;
-		case 'ranger':
-			pclass = ranger;
-			break;
-		case 'mage':
-			pclass = mage;
-			break;
-		case 'rougue':
-			pclass = rougue;
-			break;
-		case 'merchant':
-			pclass = merchant;
-			break;
-	}
+	var pclass = utils.get_class(character.ctype);
 
 	if(pclass) {
 		var anchor_mode=utils.get_bool_var('anchor_mode');
@@ -39,14 +17,6 @@ define(["require", "scripts/utils", "ui/draw", 'scripts/classes/priest', 'script
 		var near_distance_negative = utils.get_int_var('near_distance_negative');
 
 		var hunting_monster = utils.get_var('hunting_monster');
-
-		var allow_potions_purchase = utils.get_bool_var('allow_potions_purchase');
-		var buy_hp = utils.get_bool_var('buy_hp');
-		var buy_mp = utils.get_bool_var('buy_mp');
-		var hp_potion = utils.get_var('hp_potion');
-		var mp_potion = utils.get_var('mp_potion');
-		var pots_minimum = utils.get_int_var('pots_minimum');
-		var pots_to_buy = utils.get_int_var('pots_to_buy');
 
 		var turn = 0;
 		var last_turn = 0;
@@ -68,31 +38,16 @@ define(["require", "scripts/utils", "ui/draw", 'scripts/classes/priest', 'script
 
 			attack_mode = utils.get_bool_var('attack_mode');
 
+			anchor_distance_x = utils.get_int_var('anchor_distance_x');
+			anchor_distance_y = utils.get_int_var('anchor_distance_y');
+
+			near_distance = utils.get_int_var('near_distance');
+			near_distance_negative = utils.get_int_var('near_distance_negative');
+
+			hunting_monster = utils.get_var('hunting_monster');
+
 			if (turn >= 60) {
 				turn = 0;
-
-				anchor_distance_x = utils.get_int_var('anchor_distance_x');
-				anchor_distance_y = utils.get_int_var('anchor_distance_y');
-
-				near_distance = utils.get_int_var('near_distance');
-				near_distance_negative = utils.get_int_var('near_distance_negative');
-
-				hunting_monster = utils.get_var('hunting_monster');
-
-				//Check for potions
-				if(allow_potions_purchase) {
-					let [hpslot, hppot] = utils.get_item(i => i.name == hp_potion);
-					let [mpslot, mppot] = utils.get_item(i => i.name == mp_potion);
-
-					if (buy_hp && (!hppot || hppot.q < pots_minimum)) {
-						parent.buy(hp_potion, pots_to_buy);
-						set_message("Buying HP pots, slot: "+hpslot);
-					}
-					if (buy_mp && (!mppot || mppot.q < pots_minimum)) {
-						parent.buy(mp_potion, pots_to_buy);
-						set_message("Buying MP pots, slot: "+mpslot);
-					}
-				}
 			}
 
 			if(pclass.is_healer()) {
@@ -114,7 +69,6 @@ define(["require", "scripts/utils", "ui/draw", 'scripts/classes/priest', 'script
 
 			if(!pclass.has_attack()) {
 				//Merchant can't attack, so shouldn't really try
-
 				return;
 			}
 
@@ -123,19 +77,29 @@ define(["require", "scripts/utils", "ui/draw", 'scripts/classes/priest', 'script
 
 			for(var id in party) {
 				partyPlayer = party[id];
-				if(pclass.is_ranged()) { // Make ranged characters stay near the leader and other party members
+				if(pclass.is_ranged()) {
+					// Make ranged characters stay near the leader and other party members
 					if(character.name!=party_leader && !in_attack_range(partyPlayer)) {
 						move(
 							character.real_x+(partyPlayer.real_x-character.real_x)/2,
 							character.real_y+(partyPlayer.real_y-character.real_y)/2
 						);
+
+						if(utils.has_attack_range(character, target)) {
+							attack(target);
+						}
 					}
-				} else { // Make melee stay near the leader and other party members
+				} else {
+					// Make melee stay near the leader and other party members
 					if(character.name != party_leader && !utils.has_range(partyPlayer, near_distance * 3)) {
 						move(
 							character.real_x+(partyPlayer.real_x-character.real_x)/4,
 							character.real_y+(partyPlayer.real_y-character.real_y)/4
 						);
+
+						if(utils.has_attack_range(character, target)) {
+							attack(target);
+						}
 					}
 				}
 				if(pclass.is_healer()) {
@@ -251,6 +215,10 @@ define(["require", "scripts/utils", "ui/draw", 'scripts/classes/priest', 'script
 								character.real_x+(runX*1.5),
 								character.real_y+(runY*1.5)
 								);
+
+							if(utils.has_attack_range(character, target)) {
+								attack(target);
+							}
 
 							if(character.real_x == last_x || character.real_y == last_y) {
 								last_turn += 1;
